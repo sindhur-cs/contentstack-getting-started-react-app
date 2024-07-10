@@ -41,6 +41,8 @@
   .nav a.active {
     color: #3822aa;
     text-decoration-line: underline;
+    font-weight: 600;
+    text-underline-offset: 6px;
   }
 
   .nav a:hover {
@@ -189,6 +191,14 @@
   .category p:hover {
     color: #3822aa;
     opacity: 0.8;
+  }
+
+  .category p.active:hover {
+    color: #3822aa;
+    text-decoration: underline;
+    text-underline-offset: 16px;
+    font-weight: 600;
+    opacity: 1;
   }
 
   .footer {
