@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Heading } from "@contentstack/venus-components";
 import { RootState } from "../../store";
 import { TLink } from "../../types";
 
@@ -14,7 +13,7 @@ const Footer: React.FC = () => {
       <div className="footer-content">
         {navigation_links && (
           <div className="footer-link">
-            <Heading text={navigation_links?.title} tagName="h1" />
+            <h1>{navigation_links?.title}</h1>
             <nav className="footer-nav">
               {navigation_links?.link?.map((link: TLink, index: number) => (
                 <Link key={`key-${index}`} to={link.href}>
@@ -29,13 +28,13 @@ const Footer: React.FC = () => {
             <img src={information_section.logo?.url} alt="Footer" />
 
             <p>{information_section?.descrption}</p>
-            <Heading text="Hours" tagName="h3" />
+            <h3>Hours</h3>
             <p style={{ opacity: 0.8 }}>{information_section?.timings}</p>
             <p style={{ opacity: 0.8 }}>{information_section?.holiday}</p>
           </div>
         )}
       </div>
-      <Heading text={copyright} tagName="h2" />
+      <h2>{copyright}</h2>
     </div>
   );
 };
