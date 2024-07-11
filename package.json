@@ -44,5 +44,14 @@
       "last 1 safari version"
     ]
   },
+  "overrides": {
+    "nth-check": "2.0.1",
+    "ws": "8.17.1",
+    "axios": "1.6.3",
+    "serialize-javascript": "6.0.2",
+    "micromatch": "4.0.6",
+    "dompurify": "2.4.9",
+    "postcss": "8.4.31"
+  },
   "license": "MIT"
 }
