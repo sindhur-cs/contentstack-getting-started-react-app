@@ -1,4 +1,4 @@
-# React Contentstack Starter App
+# Contentstack getting started React App
 
 ## Description
 
