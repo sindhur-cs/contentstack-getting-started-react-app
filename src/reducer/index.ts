@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// COMMENT: Add TMenu in below import statement
-import { TFooterData, THeaderData, THomePageData } from "../types";
+import { TFooterData, THeaderData, THomePageData, TMenu } from "../types";
 
 interface AppState {
   headerData: THeaderData;
   footerData: TFooterData;
   homePageData: THomePageData;
-  // COMMENT: Uncomment below line
-  // menuPageData: TMenu[];
+  menuPageData: TMenu[];
 }
 
 const initialState: AppState = {
@@ -62,23 +60,22 @@ const initialState: AppState = {
       },
     ],
   },
-  // COMMENT: Uncomment below lines
-  // menuPageData: [
-  //   {
-  //     course_name: "",
-  //     dishes: [
-  //       {
-  //         uid: "",
-  //         image: {
-  //           url: "",
-  //         },
-  //         title: "",
-  //         description: "",
-  //         price: 0,
-  //       },
-  //     ],
-  //   },
-  // ],
+  menuPageData: [
+    {
+      course_name: "",
+      dishes: [
+        {
+          uid: "",
+          image: {
+            url: "",
+          },
+          title: "",
+          description: "",
+          price: 0,
+        },
+      ],
+    },
+  ],
 };
 
 const mainSlice = createSlice({
@@ -94,10 +91,9 @@ const mainSlice = createSlice({
     setHomePageData: (state, action: PayloadAction<THomePageData>) => {
       state.homePageData = action.payload;
     },
-    // COMMENT: Uncomment below lines
-    // setMenuPageData: (state, action: PayloadAction<TMenu[]>) => {
-    //   state.menuPageData = action.payload;
-    // },
+    setMenuPageData: (state, action: PayloadAction<TMenu[]>) => {
+      state.menuPageData = action.payload;
+    },
   },
 });
 
@@ -105,8 +101,7 @@ export const {
   setHeaderData,
   setFooterData,
   setHomePageData,
-  // COMMENT: Uncomment below line
-  // setMenuPageData,
+  setMenuPageData,
 } = mainSlice.actions;
 
 export default mainSlice.reducer;

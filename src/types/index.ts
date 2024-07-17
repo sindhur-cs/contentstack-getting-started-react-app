@@ -51,19 +51,17 @@ export type TLink = {
   title: string;
 };
 
-// COMMENT: Uncomment below lines
+export type TDishes = {
+  uid: string;
+  image: {
+    url: string;
+  };
+  title: string;
+  description: string;
+  price: number;
+};
 
-// export type TDishes = {
-//   uid: string;
-//   image: {
-//     url: string;
-//   };
-//   title: string;
-//   description: string;
-//   price: number;
-// };
-
-// export type TMenu = {
-//   course_name: string;
-//   dishes: TDishes[];
-// };
+export type TMenu = {
+  course_name: string;
+  dishes: TDishes[];
+};
