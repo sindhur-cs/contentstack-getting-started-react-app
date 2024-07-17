@@ -5,6 +5,7 @@ import { RootState } from "../../store";
 import { LoadingSkeleton } from "../LoadingSkeleton";
 import { TMenu, TDishes } from "../../types";
 import { fetchMenuPageData } from "../../api";
+import { onEntryChange } from "../../sdk/utils";
 
 const Menu: React.FC = () => {
   const dispatch = useDispatch();
@@ -15,7 +16,9 @@ const Menu: React.FC = () => {
     (state: RootState) => state.main.menuPageData
   );
   useEffect(() => {
-    fetchMenuPageData(dispatch, setLoading);
+    onEntryChange(() => {
+      fetchMenuPageData(dispatch, setLoading);
+    });
   }, [dispatch]);
 
   const memoizedMenuPageData = useMemo(() => menuPageData, [menuPageData]);
