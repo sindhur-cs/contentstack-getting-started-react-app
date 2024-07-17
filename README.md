@@ -29,6 +29,7 @@ This is a React starter app that integrates with Contentstack's Content Delivery
    ```
    REACT_APP_CONTENTSTACK_API_KEY=YOUR_STACK_API_KEY
    REACT_APP_CONTENTSTACK_DELIVERY_TOKEN=YOUR_DELIVERY_TOKEN
+   REACT_APP_CONTENTSTACK_PREVIEW_TOKEN=YOUR_PREVIEW_TOKEN
    REACT_APP_CONTENTSTACK_ENVIRONMENT=YOUR_ENVIRONMENT
    REACT_APP_CONTENTSTACK_REGION=YOUR_STACK_REGION
    ```
@@ -42,7 +43,7 @@ This is a React starter app that integrates with Contentstack's Content Delivery
 
 To configure the app with your Contentstack account:
 
-- Replace `YOUR_STACK_API_KEY`, `YOUR_DELIVERY_TOKEN`, `YOUR_ENVIRONMENT` and `YOUR_STACK_REGION` in the `.env` file with your Contentstack API key, delivery token, environment name and region respectively.
+- Replace `YOUR_STACK_API_KEY`, `YOUR_DELIVERY_TOKEN`, `YOUR_PREVIEW_TOKEN`, `YOUR_ENVIRONMENT` and `YOUR_STACK_REGION` in the `.env` file with your Contentstack API key, delivery token, environment name and region respectively.
 
 **Supported Regions:**
 
@@ -51,6 +52,8 @@ To configure the app with your Contentstack account:
 - **Azure North America:** `AZURE_NA`
 - **Azure Europe:** `AZURE_EU`
 - **GCP North America:** `GCP_NA`
+
+> 🚨 **Important Note:** **Live Preview** is not supported in the **GCP NA** region! 🚨
 
 ## Usage
 
@@ -62,6 +65,7 @@ To configure the app with your Contentstack account:
 
 - Integration with Contentstack's Content Delivery API.
 - Dynamic rendering of content fetched from Contentstack.
+- Live Preview of the Content
 
 ## License
 

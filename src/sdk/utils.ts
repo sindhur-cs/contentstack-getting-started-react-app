@@ -81,6 +81,17 @@ export const initializeContentstackSdk = () => {
 
   ContentstackLivePreview.init({
     stackSdk: Stack,
+    clientUrlParams: {
+      protocol: "https",
+      host: getHostByRegion(REACT_APP_CONTENTSTACK_REGION as string),
+      port: 443,
+    },
+    editButton: {
+      enable: true,
+      exclude: ["outsideLivePreviewPortal"],
+      includeByQueryParameter: true,
+      position: "bottom",
+    },
   });
 
   return Stack;

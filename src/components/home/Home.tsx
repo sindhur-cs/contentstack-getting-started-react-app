@@ -35,13 +35,22 @@ const Home: React.FC = () => {
       <div className="hero-section">
         {home.hero_section?.banner?.url && (
           <div className="hero-banner">
-            <img src={home.hero_section.banner.url} alt="Hero Banner" />
+            <img
+              {...home.hero_section.banner.$.url}
+              src={home.hero_section.banner.url}
+              alt="Hero Banner"
+            />
           </div>
         )}
         <div className="hero-content">
-          <h1>{styleAlternateWords(home.hero_section?.heading || "")}</h1>
-          <p>{home.hero_section?.description}</p>
+          <h1 {...home.hero_section?.$.heading}>
+            {styleAlternateWords(home.hero_section?.heading || "")}
+          </h1>
+          <p {...home.hero_section?.$.description}>
+            {home.hero_section?.description}
+          </p>
           <Button
+            {...home.hero_section?.$.primary_cta}
             size="large"
             className="cta-button"
             onClick={() => {

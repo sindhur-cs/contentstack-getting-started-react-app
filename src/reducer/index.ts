@@ -10,13 +10,25 @@ interface AppState {
 
 const initialState: AppState = {
   headerData: {
-    website_title: "",
     logo: {
+      $: {
+        url: {
+          "data-cslp": "",
+        },
+      },
       url: "",
     },
     navigation_links: {
       link: [
         {
+          $: {
+            title: {
+              "data-cslp": "",
+            },
+            href: {
+              "data-cslp": "",
+            },
+          },
           href: "",
           title: "",
         },
@@ -24,18 +36,51 @@ const initialState: AppState = {
     },
   },
   footerData: {
-    title: "",
+    $: {
+      copyright: {
+        "data-cslp": "",
+      },
+    },
     navigation_links: {
+      $: {
+        title: {
+          "data-cslp": "",
+        },
+      },
       title: "",
       link: [
         {
+          $: {
+            title: {
+              "data-cslp": "",
+            },
+            href: {
+              "data-cslp": "",
+            },
+          },
           href: "",
           title: "",
         },
       ],
     },
     information_section: {
+      $: {
+        descrption: {
+          "data-cslp": "",
+        },
+        timings: {
+          "data-cslp": "",
+        },
+        holiday: {
+          "data-cslp": "",
+        },
+      },
       logo: {
+        $: {
+          url: {
+            "data-cslp": "",
+          },
+        },
         url: "",
       },
       descrption: "",
@@ -49,7 +94,23 @@ const initialState: AppState = {
       {
         home: {
           hero_section: {
+            $: {
+              heading: {
+                "data-cslp": "",
+              },
+              description: {
+                "data-cslp": "",
+              },
+              primary_cta: {
+                "data-cslp": "",
+              },
+            },
             banner: {
+              $: {
+                url: {
+                  "data-cslp": "",
+                },
+              },
               url: "",
             },
             heading: "",
@@ -62,11 +123,32 @@ const initialState: AppState = {
   },
   menuPageData: [
     {
+      $: {
+        course_name: {
+          "data-cslp": "",
+        },
+      },
       course_name: "",
       dishes: [
         {
+          $: {
+            title: {
+              "data-cslp": "",
+            },
+            description: {
+              "data-cslp": "",
+            },
+            price: {
+              "data-cslp": "",
+            },
+          },
           uid: "",
           image: {
+            $: {
+              url: {
+                "data-cslp": "",
+              },
+            },
             url: "",
           },
           title: "",

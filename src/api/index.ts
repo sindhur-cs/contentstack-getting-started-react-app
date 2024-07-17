@@ -8,6 +8,7 @@ import {
 } from "../reducer";
 import { initializeContentstackSdk } from "../sdk/utils";
 import * as Utils from "@contentstack/utils";
+import { addEditableTags } from "@contentstack/utils";
 
 const Stack = initializeContentstackSdk();
 
@@ -67,6 +68,7 @@ export const fetchHeaderData = async (
   dispatch: Dispatch<any>
 ): Promise<void> => {
   const data = await getEntry(CONTENT_TYPES.HEADER);
+  addEditableTags(data[0][0], CONTENT_TYPES.HEADER, true, "en-us");
   dispatch(setHeaderData(data[0][0]));
 };
 
@@ -74,6 +76,7 @@ export const fetchFooterData = async (
   dispatch: Dispatch<any>
 ): Promise<void> => {
   const data = await getEntry(CONTENT_TYPES.FOOTER);
+  addEditableTags(data[0][0], CONTENT_TYPES.FOOTER, true, "en-us");
   dispatch(setFooterData(data[0][0]));
 };
 
@@ -86,6 +89,7 @@ export const fetchHomePageData = async (
     referenceFieldPath: undefined,
     jsonRtePath: undefined,
   });
+  addEditableTags(data[0], CONTENT_TYPES.PAGE, true, "en-us");
   dispatch(setHomePageData(data[0]));
 };
 
@@ -115,6 +119,7 @@ export const fetchMenuPageData = async (
     referenceFieldPath: ["sections.menu.course.dishes"],
     jsonRtePath: undefined,
   });
+  addEditableTags(data[0], CONTENT_TYPES.PAGE, true, "en-us");
   dispatch(setMenuPageData(data[0].sections[0].menu.course));
   setLoading(false);
 };

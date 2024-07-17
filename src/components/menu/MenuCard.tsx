@@ -8,6 +8,7 @@ const MenuCard: React.FC<{ data: TDishes[] }> = ({ data }) => {
         data.map((menuItem: TDishes) => (
           <div className="menu-card-item">
             <div
+              {...menuItem.image.$.url}
               style={{
                 background: `url(${menuItem.image.url}) lightgray 50% / cover no-repeat`,
                 height: "320px",
@@ -16,9 +17,13 @@ const MenuCard: React.FC<{ data: TDishes[] }> = ({ data }) => {
             ></div>
             <div className="item-content">
               <div className="item-content-text">
-                <span className="price">${menuItem.price}</span>
-                <p>{menuItem.title}</p>
-                <span className="description">{menuItem.description}</span>
+                <span {...menuItem.$.price} className="price">
+                  ${menuItem.price}
+                </span>
+                <p {...menuItem.$.title}>{menuItem.title}</p>
+                <span {...menuItem.$.description} className="description">
+                  {menuItem.description}
+                </span>
               </div>
               <hr
                 style={{

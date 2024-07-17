@@ -23,9 +23,7 @@ const Menu: React.FC = () => {
 
   const memoizedMenuPageData = useMemo(() => menuPageData, [menuPageData]);
 
-  const categories = memoizedMenuPageData?.map(
-    (course: TMenu) => course.course_name
-  );
+  const categories = memoizedMenuPageData?.map((course: TMenu) => course);
   const dishes = memoizedMenuPageData?.map((course: TMenu) => course.dishes);
   const flatDishes: TDishes[] = dishes
     ?.flat()
@@ -70,11 +68,12 @@ const Menu: React.FC = () => {
               </p>
               {categories?.map((category, index) => (
                 <p
+                  {...category.$.course_name}
                   key={`cat-${index + 1}`}
                   className={activeIndex === index + 1 ? "active" : ""}
                   onClick={() => setActiveIndex(index + 1)}
                 >
-                  {category}
+                  {category.course_name}
                 </p>
               ))}
             </div>
