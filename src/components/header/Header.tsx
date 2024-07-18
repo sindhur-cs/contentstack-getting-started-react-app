@@ -18,12 +18,13 @@ const Header: React.FC = () => {
     <div className={`header ${isOpen ? "open" : ""}`}>
       <div className="logo-menu">
         <Link to="/">
-          <img src={logo?.url} alt="Logo" />
+          <img {...logo.$.url} src={logo?.url} alt="Logo" />
         </Link>
       </div>
       <nav className={`nav ${isOpen ? "active" : ""}`}>
         {navigation_links?.link.map((link: TLink, index: number) => (
           <Link
+            {...link.$.title}
             key={`key-${index}`}
             to={link.href}
             className={location.pathname === link.href ? "active" : ""}

@@ -1,24 +1,34 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// COMMENT: Add TMenu in below import statement
-import { TFooterData, THeaderData, THomePageData } from "../types";
+import { TFooterData, THeaderData, THomePageData, TMenu } from "../types";
 
 interface AppState {
   headerData: THeaderData;
   footerData: TFooterData;
   homePageData: THomePageData;
-  // COMMENT: Uncomment below line
-  // menuPageData: TMenu[];
+  menuPageData: TMenu[];
 }
 
 const initialState: AppState = {
   headerData: {
-    website_title: "",
     logo: {
+      $: {
+        url: {
+          "data-cslp": "",
+        },
+      },
       url: "",
     },
     navigation_links: {
       link: [
         {
+          $: {
+            title: {
+              "data-cslp": "",
+            },
+            href: {
+              "data-cslp": "",
+            },
+          },
           href: "",
           title: "",
         },
@@ -26,18 +36,51 @@ const initialState: AppState = {
     },
   },
   footerData: {
-    title: "",
+    $: {
+      copyright: {
+        "data-cslp": "",
+      },
+    },
     navigation_links: {
+      $: {
+        title: {
+          "data-cslp": "",
+        },
+      },
       title: "",
       link: [
         {
+          $: {
+            title: {
+              "data-cslp": "",
+            },
+            href: {
+              "data-cslp": "",
+            },
+          },
           href: "",
           title: "",
         },
       ],
     },
     information_section: {
+      $: {
+        descrption: {
+          "data-cslp": "",
+        },
+        timings: {
+          "data-cslp": "",
+        },
+        holiday: {
+          "data-cslp": "",
+        },
+      },
       logo: {
+        $: {
+          url: {
+            "data-cslp": "",
+          },
+        },
         url: "",
       },
       descrption: "",
@@ -51,7 +94,23 @@ const initialState: AppState = {
       {
         home: {
           hero_section: {
+            $: {
+              heading: {
+                "data-cslp": "",
+              },
+              description: {
+                "data-cslp": "",
+              },
+              primary_cta: {
+                "data-cslp": "",
+              },
+            },
             banner: {
+              $: {
+                url: {
+                  "data-cslp": "",
+                },
+              },
               url: "",
             },
             heading: "",
@@ -62,23 +121,43 @@ const initialState: AppState = {
       },
     ],
   },
-  // COMMENT: Uncomment below lines
-  // menuPageData: [
-  //   {
-  //     course_name: "",
-  //     dishes: [
-  //       {
-  //         uid: "",
-  //         image: {
-  //           url: "",
-  //         },
-  //         title: "",
-  //         description: "",
-  //         price: 0,
-  //       },
-  //     ],
-  //   },
-  // ],
+  menuPageData: [
+    {
+      $: {
+        course_name: {
+          "data-cslp": "",
+        },
+      },
+      course_name: "",
+      dishes: [
+        {
+          $: {
+            title: {
+              "data-cslp": "",
+            },
+            description: {
+              "data-cslp": "",
+            },
+            price: {
+              "data-cslp": "",
+            },
+          },
+          uid: "",
+          image: {
+            $: {
+              url: {
+                "data-cslp": "",
+              },
+            },
+            url: "",
+          },
+          title: "",
+          description: "",
+          price: 0,
+        },
+      ],
+    },
+  ],
 };
 
 const mainSlice = createSlice({
@@ -94,10 +173,9 @@ const mainSlice = createSlice({
     setHomePageData: (state, action: PayloadAction<THomePageData>) => {
       state.homePageData = action.payload;
     },
-    // COMMENT: Uncomment below lines
-    // setMenuPageData: (state, action: PayloadAction<TMenu[]>) => {
-    //   state.menuPageData = action.payload;
-    // },
+    setMenuPageData: (state, action: PayloadAction<TMenu[]>) => {
+      state.menuPageData = action.payload;
+    },
   },
 });
 
@@ -105,8 +183,7 @@ export const {
   setHeaderData,
   setFooterData,
   setHomePageData,
-  // COMMENT: Uncomment below line
-  // setMenuPageData,
+  setMenuPageData,
 } = mainSlice.actions;
 
 export default mainSlice.reducer;

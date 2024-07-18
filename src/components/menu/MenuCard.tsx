@@ -1,16 +1,14 @@
 import React from "react";
-// COMMENT: Uncomment below import statement
-// import { TDishes } from "../../types";
+import { TDishes } from "../../types";
 
-// COMMENT: Replace any[] with TDishes[]
-const MenuCard: React.FC<{ data: any[] }> = ({ data }) => {
+const MenuCard: React.FC<{ data: TDishes[] }> = ({ data }) => {
   return (
     <div className="menu-card">
       {data ? (
-        // COMMENT: Replace any with TDishes
-        data.map((menuItem: any) => (
+        data.map((menuItem: TDishes) => (
           <div className="menu-card-item">
             <div
+              {...menuItem.image.$.url}
               style={{
                 background: `url(${menuItem.image.url}) lightgray 50% / cover no-repeat`,
                 height: "320px",
@@ -19,9 +17,13 @@ const MenuCard: React.FC<{ data: any[] }> = ({ data }) => {
             ></div>
             <div className="item-content">
               <div className="item-content-text">
-                <span className="price">${menuItem.price}</span>
-                <p>{menuItem.title}</p>
-                <span className="description">{menuItem.description}</span>
+                <span {...menuItem.$.price} className="price">
+                  ${menuItem.price}
+                </span>
+                <p {...menuItem.$.title}>{menuItem.title}</p>
+                <span {...menuItem.$.description} className="description">
+                  {menuItem.description}
+                </span>
               </div>
               <hr
                 style={{

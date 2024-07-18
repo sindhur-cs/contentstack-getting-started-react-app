@@ -1,26 +1,51 @@
 export type THeaderData = {
-  website_title: string;
   logo: {
     url: string;
+    $: {
+      url: {
+        "data-cslp": string;
+      };
+    };
   };
   navigation_links: {
-    link: {
-      href: string;
-      title: string;
-    }[];
+    link: TLink[];
   };
 };
 
 export type TFooterData = {
-  title: string;
-
+  $: {
+    copyright: {
+      "data-cslp": string;
+    };
+  };
   navigation_links?: {
+    $: {
+      title: {
+        "data-cslp": string;
+      };
+    };
     title?: string;
     link?: TLink[];
   };
 
   information_section?: {
+    $: {
+      descrption: {
+        "data-cslp": string;
+      };
+      timings: {
+        "data-cslp": string;
+      };
+      holiday: {
+        "data-cslp": string;
+      };
+    };
     logo?: {
+      $: {
+        url: {
+          "data-cslp": string;
+        };
+      };
       url?: string;
     };
     descrption?: string;
@@ -35,7 +60,23 @@ export type THomePageData = {
   sections: {
     home: {
       hero_section?: {
+        $: {
+          heading: {
+            "data-cslp": string;
+          };
+          description: {
+            "data-cslp": string;
+          };
+          primary_cta: {
+            "data-cslp": string;
+          };
+        };
         banner?: {
+          $: {
+            url: {
+              "data-cslp": string;
+            };
+          };
           url: string;
         };
         heading?: string;
@@ -47,23 +88,50 @@ export type THomePageData = {
 };
 
 export type TLink = {
+  $: {
+    href: {
+      "data-cslp": string;
+    };
+    title: {
+      "data-cslp": string;
+    };
+  };
   href: string;
   title: string;
 };
 
-// COMMENT: Uncomment below lines
+export type TDishes = {
+  $: {
+    title: {
+      "data-cslp": string;
+    };
+    description: {
+      "data-cslp": string;
+    };
+    price: {
+      "data-cslp": string;
+    };
+  };
+  uid: string;
+  image: {
+    $: {
+      url: {
+        "data-cslp": string;
+      };
+    };
+    url: string;
+  };
+  title: string;
+  description: string;
+  price: number;
+};
 
-// export type TDishes = {
-//   uid: string;
-//   image: {
-//     url: string;
-//   };
-//   title: string;
-//   description: string;
-//   price: number;
-// };
-
-// export type TMenu = {
-//   course_name: string;
-//   dishes: TDishes[];
-// };
+export type TMenu = {
+  $: {
+    course_name: {
+      "data-cslp": string;
+    };
+  };
+  course_name: string;
+  dishes: TDishes[];
+};
