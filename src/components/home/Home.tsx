@@ -1,14 +1,16 @@
+"use client";
 import React, { useMemo } from "react";
+import Image from "next/image";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { RootState } from "@/store";
 import { Button } from "@contentstack/venus-components";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 const Home: React.FC = () => {
   const homePageData = useSelector(
     (state: RootState) => state.main.homePageData
   );
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const memoizedHomePageData = useMemo(() => homePageData, [homePageData]);
 
@@ -18,7 +20,13 @@ const Home: React.FC = () => {
     return text
       .split(" ")
       .map((char, index) =>
-        index % 2 === 1 ? <span className="italic">{char}</span> : char
+        index % 2 === 1 ? (
+          <span key={index} className="italic">
+            {char}
+          </span>
+        ) : (
+          char
+        )
       )
       .reduce(
         (acc, curr) => (
@@ -35,10 +43,13 @@ const Home: React.FC = () => {
       <div className="hero-section">
         {home.hero_section?.banner?.url && (
           <div className="hero-banner">
-            <img
+            <Image
               {...home.hero_section.banner.$.url}
               src={home.hero_section.banner.url}
               alt="Hero Banner"
+              width={4096}
+              height={2731}
+              priority={true}
             />
           </div>
         )}
@@ -54,7 +65,7 @@ const Home: React.FC = () => {
             size="large"
             className="cta-button"
             onClick={() => {
-              navigate(home.hero_section?.primary_cta ?? "");
+              router.push(home.hero_section?.primary_cta ?? "");
             }}
           >
             View Our Menu

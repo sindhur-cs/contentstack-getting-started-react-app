@@ -1,20 +1,22 @@
+"use client";
 import React, { useEffect, useMemo, useState } from "react";
 import MenuCard from "./MenuCard";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { LoadingSkeleton } from "../LoadingSkeleton";
-import { TMenu, TDishes } from "../../types";
-import { fetchMenuPageData } from "../../api";
-import { onEntryChange } from "../../sdk/utils";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store";
+import { LoadingSkeleton } from "@/app/LoadingSkeleton";
+import { TMenu, TDishes } from "@/types";
+import { fetchMenuPageData } from "@/api";
+import { onEntryChange } from "@/sdk/utils";
 
 const Menu: React.FC = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [activeIndex, setActiveIndex] = useState<number>(0 ?? null);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const menuPageData = useSelector(
     (state: RootState) => state.main.menuPageData
   );
+
   useEffect(() => {
     onEntryChange(() => {
       fetchMenuPageData(dispatch, setLoading);
@@ -35,7 +37,13 @@ const Menu: React.FC = () => {
     return text
       .split(" ")
       .map((char, index) =>
-        index % 2 === 1 ? <span className="italic">{char}</span> : char
+        index % 2 === 1 ? (
+          <span key={index} className="italic">
+            {char}
+          </span>
+        ) : (
+          char
+        )
       )
       .reduce(
         (acc, curr) => (

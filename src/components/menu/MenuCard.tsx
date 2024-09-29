@@ -1,12 +1,12 @@
 import React from "react";
-import { TDishes } from "../../types";
+import { TDishes } from "@/types";
 
 const MenuCard: React.FC<{ data: TDishes[] }> = ({ data }) => {
   return (
     <div className="menu-card">
       {data ? (
         data.map((menuItem: TDishes) => (
-          <div className="menu-card-item">
+          <div key={menuItem?.uid} className="menu-card-item">
             <div
               {...menuItem.image.$.url}
               style={{

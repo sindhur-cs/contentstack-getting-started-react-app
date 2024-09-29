@@ -1,8 +1,10 @@
+"use client";
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { RootState } from "../../store";
-import { TLink } from "../../types";
+import { RootState } from "@/store";
+import Link from "next/link";
+import Image from "next/image";
+import { TLink } from "@/types";
 
 const Footer: React.FC = () => {
   const footerData = useSelector((state: RootState) => state.main.footerData);
@@ -16,7 +18,7 @@ const Footer: React.FC = () => {
             <h1 {...navigation_links.$.title}>{navigation_links?.title}</h1>
             <nav className="footer-nav">
               {navigation_links?.link?.map((link: TLink, index: number) => (
-                <Link {...link.$.title} key={`key-${index}`} to={link.href}>
+                <Link {...link.$.title} key={`key-${index}`} href={link.href}>
                   {link.title}
                 </Link>
               ))}
@@ -25,10 +27,13 @@ const Footer: React.FC = () => {
         )}
         {information_section && (
           <div className="footer-info">
-            <img
-              {...information_section.logo?.$.url}
-              src={information_section.logo?.url}
+            <Image
+              {...information_section?.logo?.$.url}
+              src={information_section.logo?.url || ""}
               alt="Footer"
+              width={300}
+              height={50}
+              priority={true}
             />
 
             <p {...information_section.$.descrption}>

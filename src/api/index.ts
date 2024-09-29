@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { Dispatch } from "react";
-import { CONTENT_TYPES } from "../constants";
+import { CONTENT_TYPES } from "@/constants";
 import {
   setFooterData,
   setHeaderData,
   setHomePageData,
   setMenuPageData,
-} from "../reducer";
-import { initializeContentstackSdk } from "../sdk/utils";
+} from "@/reducer";
+import { initializeContentstackSdk } from "@/sdk/utils";
 import * as Utils from "@contentstack/utils";
 import { addEditableTags } from "@contentstack/utils";
 
@@ -48,12 +49,13 @@ export const getEntryByUrl = ({
     const data = blogQuery.where("url", `${entryUrl}`).find();
     data.then(
       (result) => {
-        jsonRtePath &&
+        if (jsonRtePath) {
           Utils.jsonToHTML({
             entry: result,
             paths: jsonRtePath,
             renderOption,
           });
+        }
         resolve(result[0]);
       },
       (error) => {

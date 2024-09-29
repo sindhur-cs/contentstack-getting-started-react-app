@@ -1,46 +1,72 @@
 import Contentstack from "contentstack";
 import ContentstackLivePreview from "@contentstack/live-preview-utils";
 
-const getLivePreviewHostByRegion = (region: string) => {
-  switch (region) {
-    case "US":
-      return "rest-preview.contentstack.com";
-    case "EU":
-      return "eu-rest-preview.contentstack.com";
-    case "AZURE_NA":
-      return "azure-na-rest-preview.contentstack.com";
-    case "AZURE_EU":
-      return "azure-eu-rest-preview.contentstack.com";
-    default:
-      return "rest-preview.contentstack.com";
-  }
+const getConfig = () => {
+  return {
+    api_key: process.env.CONTENTSTACK_API_KEY,
+    delivery_token: process.env.CONTENTSTACK_DELIVERY_TOKEN,
+    environment: process.env.CONTENTSTACK_ENVIRONMENT,
+    region: process.env.CONTENTSTACK_REGION,
+    preview_token: process.env.CONTENTSTACK_PREVIEW_TOKEN,
+    host_env: process.env.CONTENTSTACK_HOST_ENV,
+  };
 };
-const getHostByRegion = (region: string) => {
+
+const getModifiedHost = (baseHost: string, hostEnv?: string) => {
+  if (hostEnv) {
+    const [subdomain] = baseHost.split(".");
+    return `${hostEnv}-${subdomain}.csnonprod.com`;
+  }
+  return baseHost;
+};
+
+const getLivePreviewHostByRegion = (region: string, hostEnv?: string) => {
+  let baseHost: string;
   switch (region) {
     case "US":
-      return "app.contentstack.com";
+      baseHost = "rest-preview.contentstack.com";
+      break;
     case "EU":
-      return "eu-app.contentstack.com";
+      baseHost = "eu-rest-preview.contentstack.com";
+      break;
     case "AZURE_NA":
-      return "azure-na-app.contentstack.com";
+      baseHost = "azure-na-rest-preview.contentstack.com";
+      break;
     case "AZURE_EU":
-      return "azure-eu-app.contentstack.com";
-    case "GCP_NA":
-      return "gcp-na-api.contentstack.com";
+      baseHost = "azure-eu-rest-preview.contentstack.com";
+      break;
     default:
-      return "app.contentstack.com";
+      baseHost = "rest-preview.contentstack.com";
   }
+  return getModifiedHost(baseHost, hostEnv);
+};
+
+const getHostByRegion = (region: string, hostEnv?: string) => {
+  let baseHost: string;
+  switch (region) {
+    case "US":
+      baseHost = "app.contentstack.com";
+      break;
+    case "EU":
+      baseHost = "eu-app.contentstack.com";
+      break;
+    case "AZURE_NA":
+      baseHost = "azure-na-app.contentstack.com";
+      break;
+    case "AZURE_EU":
+      baseHost = "azure-eu-app.contentstack.com";
+      break;
+    case "GCP_NA":
+      baseHost = "gcp-na-api.contentstack.com";
+      break;
+    default:
+      baseHost = "app.contentstack.com";
+  }
+  return getModifiedHost(baseHost, hostEnv);
 };
 
 export const initializeContentstackSdk = () => {
-  const {
-    REACT_APP_CONTENTSTACK_API_KEY,
-    REACT_APP_CONTENTSTACK_DELIVERY_TOKEN,
-    REACT_APP_CONTENTSTACK_ENVIRONMENT,
-    REACT_APP_CONTENTSTACK_REGION,
-    REACT_APP_CONTENTSTACK_PREVIEW_TOKEN,
-  } = process.env;
-
+  const config = getConfig();
   const region: Contentstack.Region | undefined = (function (
     regionValue: string
   ) {
@@ -58,32 +84,37 @@ export const initializeContentstackSdk = () => {
       default:
         return undefined;
     }
-  })(REACT_APP_CONTENTSTACK_REGION as string);
+  })(config.region as string);
 
   if (!region) {
     throw new Error(
-      "Invalid region provided in REACT_APP_CONTENTSTACK_REGION. Valid values are: " +
+      "Invalid region provided in CONTENTSTACK_REGION. Valid values are: " +
         Object.keys(Contentstack.Region).join(", ")
     );
   }
 
   const Stack = Contentstack.Stack({
-    api_key: REACT_APP_CONTENTSTACK_API_KEY as string,
-    delivery_token: REACT_APP_CONTENTSTACK_DELIVERY_TOKEN as string,
-    environment: REACT_APP_CONTENTSTACK_ENVIRONMENT as string,
+    api_key: config.api_key as string,
+    delivery_token: config.delivery_token as string,
+    environment: config.environment as string,
     region: region,
     live_preview: {
       enable: true,
-      host: getLivePreviewHostByRegion(REACT_APP_CONTENTSTACK_REGION as string),
-      preview_token: REACT_APP_CONTENTSTACK_PREVIEW_TOKEN as string,
+      host: getLivePreviewHostByRegion(
+        config.region as string,
+        config.host_env
+      ),
+      preview_token: config.preview_token as string,
     },
   });
+
+  Stack.setHost(getHostByRegion(config.region as string, config.host_env));
 
   ContentstackLivePreview.init({
     stackSdk: Stack,
     clientUrlParams: {
       protocol: "https",
-      host: getHostByRegion(REACT_APP_CONTENTSTACK_REGION as string),
+      host: getHostByRegion(config.region as string, config.host_env),
       port: 443,
     },
     editButton: {

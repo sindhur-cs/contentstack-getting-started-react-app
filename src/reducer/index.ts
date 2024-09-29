@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TFooterData, THeaderData, THomePageData, TMenu } from "../types";
+import { TFooterData, THeaderData, THomePageData, TMenu } from "@/types";
 
 interface AppState {
   headerData: THeaderData;

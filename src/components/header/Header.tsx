@@ -1,14 +1,17 @@
+"use client";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
-import { RootState } from "../../store";
-import { TLink } from "../../types";
+import { RootState } from "@/store";
+import { TLink } from "@/types";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const Header: React.FC = () => {
   const headerData = useSelector((state: RootState) => state.main.headerData);
   const { logo, navigation_links } = headerData;
-  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleToggleMenu = () => {
     setIsOpen(!isOpen);
@@ -17,8 +20,15 @@ const Header: React.FC = () => {
   return (
     <div className={`header ${isOpen ? "open" : ""}`}>
       <div className="logo-menu">
-        <Link to="/">
-          <img {...logo.$.url} src={logo?.url} alt="Logo" />
+        <Link href="/">
+          <Image
+            {...logo.$.url}
+            src={logo?.url || ""}
+            alt="Logo"
+            width={300}
+            height={50}
+            priority={true}
+          />
         </Link>
       </div>
       <nav className={`nav ${isOpen ? "active" : ""}`}>
@@ -26,8 +36,8 @@ const Header: React.FC = () => {
           <Link
             {...link.$.title}
             key={`key-${index}`}
-            to={link.href}
-            className={location.pathname === link.href ? "active" : ""}
+            href={link.href}
+            className={pathname === link.href ? "active" : ""}
             onClick={() => setIsOpen(false)}
           >
             {link.title}
