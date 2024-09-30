@@ -108,15 +108,21 @@ export const initializeContentstackSdk = () => {
     },
   });
 
-  Stack.setHost(getHostByRegion(config.region as string, config.host_env));
+  // Stack.setHost(getHostByRegion(config.region as string, config.host_env));
+  Stack.setHost("dev11-cdn.csnonprod.com");
 
   ContentstackLivePreview.init({
     stackSdk: Stack,
+    stackDetails: {
+      apiKey: config.api_key,
+      environment: config.environment,
+    },
     clientUrlParams: {
       protocol: "https",
       host: getHostByRegion(config.region as string, config.host_env),
       port: 443,
     },
+    mode: "builder",
     editButton: {
       enable: true,
       exclude: ["outsideLivePreviewPortal"],

@@ -18,6 +18,7 @@ type GetEntryByUrl = {
   contentTypeUid: string;
   referenceFieldPath: string[] | undefined;
   jsonRtePath: string[] | undefined;
+  variant?: string | undefined;
 };
 
 const renderOption = {
@@ -36,34 +37,79 @@ export const getEntry = (contentType: string) => {
     });
 };
 
-export const getEntryByUrl = ({
+// export const getEntryByUrl = ({
+//   contentTypeUid,
+//   entryUrl,
+//   referenceFieldPath,
+//   jsonRtePath,
+// }: GetEntryByUrl) => {
+//   return new Promise((resolve, reject) => {
+//     const blogQuery = Stack.ContentType(contentTypeUid).Query();
+//     if (referenceFieldPath) blogQuery.includeReference(referenceFieldPath);
+//     blogQuery.toJSON();
+//     const data = blogQuery.where("url", `${entryUrl}`).find();
+//     data.then(
+//       (result) => {
+//         if (jsonRtePath) {
+//           Utils.jsonToHTML({
+//             entry: result,
+//             paths: jsonRtePath,
+//             renderOption,
+//           });
+//         }
+//         resolve(result[0]);
+//       },
+//       (error) => {
+//         console.error(error);
+//         reject(error);
+//       }
+//     );
+//   });
+// };
+
+function deserializeVariantIds(variantsQueryParam: string): string[] {
+  return variantsQueryParam
+    .split(",")
+    .map((variantPair) => `cs_personalize_${variantPair.split("=").join("_")}`);
+}
+
+export const getEntryByUrl = async ({
   contentTypeUid,
   entryUrl,
   referenceFieldPath,
   jsonRtePath,
+  variant,
 }: GetEntryByUrl) => {
-  return new Promise((resolve, reject) => {
-    const blogQuery = Stack.ContentType(contentTypeUid).Query();
-    if (referenceFieldPath) blogQuery.includeReference(referenceFieldPath);
-    blogQuery.toJSON();
-    const data = blogQuery.where("url", `${entryUrl}`).find();
-    data.then(
-      (result) => {
-        if (jsonRtePath) {
-          Utils.jsonToHTML({
-            entry: result,
-            paths: jsonRtePath,
-            renderOption,
-          });
-        }
-        resolve(result[0]);
-      },
-      (error) => {
-        console.error(error);
-        reject(error);
+  try {
+    const entryQuery = Stack.ContentType(contentTypeUid).Query();
+    if (referenceFieldPath) entryQuery.includeReference(referenceFieldPath);
+    entryQuery.toJSON();
+
+    let entry;
+    if (variant) {
+      const entryCall = entryQuery.where("url", `${entryUrl}`);
+      entry = await entryCall.variants(deserializeVariantIds(variant)).find();
+      // entry = await entryCall.variants(["cs_personalize_0_1"]).find();
+    } else {
+      entry = await entryQuery.where("url", `${entryUrl}`).find();
+    }
+
+    if (entry && entry.length > 0) {
+      if (jsonRtePath) {
+        Utils.jsonToHTML({
+          entry: entry[0],
+          paths: jsonRtePath,
+          renderOption,
+        });
       }
-    );
-  });
+      return entry[0];
+    } else {
+      throw new Error("Entry not found");
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export const fetchHeaderData = async (
@@ -113,6 +159,7 @@ export const fetchInitialData = async (
 
 export const fetchMenuPageData = async (
   dispatch: Dispatch<any>,
+  variant: string | undefined,
   setLoading: (status: boolean) => void
 ): Promise<void> => {
   const data: any = await getEntryByUrl({
@@ -120,7 +167,9 @@ export const fetchMenuPageData = async (
     entryUrl: "/menu",
     referenceFieldPath: ["sections.menu.course.dishes"],
     jsonRtePath: undefined,
+    variant,
   });
+
   addEditableTags(data[0], CONTENT_TYPES.PAGE, true, "en-us");
   dispatch(setMenuPageData(data[0].sections[0].menu.course));
   setLoading(false);
