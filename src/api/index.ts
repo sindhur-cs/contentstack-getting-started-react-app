@@ -38,42 +38,6 @@ export const getEntry = (contentType: string) => {
     });
 };
 
-// export const getEntryByUrl = ({
-//   contentTypeUid,
-//   entryUrl,
-//   referenceFieldPath,
-//   jsonRtePath,
-// }: GetEntryByUrl) => {
-//   return new Promise((resolve, reject) => {
-//     const blogQuery = Stack.ContentType(contentTypeUid).Query();
-//     if (referenceFieldPath) blogQuery.includeReference(referenceFieldPath);
-//     blogQuery.toJSON();
-//     const data = blogQuery.where("url", `${entryUrl}`).find();
-//     data.then(
-//       (result) => {
-//         if (jsonRtePath) {
-//           Utils.jsonToHTML({
-//             entry: result,
-//             paths: jsonRtePath,
-//             renderOption,
-//           });
-//         }
-//         resolve(result[0]);
-//       },
-//       (error) => {
-//         console.error(error);
-//         reject(error);
-//       }
-//     );
-//   });
-// };
-
-function deserializeVariantIds(variantsQueryParam: string): string[] {
-  return variantsQueryParam
-    .split(",")
-    .map((variantPair) => `cs_personalize_${variantPair.split("=").join("_")}`);
-}
-
 export const getEntryByUrl = async ({
   contentTypeUid,
   entryUrl,
@@ -85,15 +49,6 @@ export const getEntryByUrl = async ({
     const entryQuery = Stack.ContentType(contentTypeUid).Query();
     if (referenceFieldPath) entryQuery.includeReference(referenceFieldPath);
     entryQuery.toJSON();
-
-    // let entry;
-    // if (variant) {
-    //   const entryCall = entryQuery.where("url", `${entryUrl}`);
-    //   entry = await entryCall.variants(deserializeVariantIds(variant)).find();
-    //   // entry = await entryCall.variants(["cs_personalize_0_1"]).find();
-    // } else {
-    //   entry = await entryQuery.where("url", `${entryUrl}`).find();
-    // }
 
     let entry;
     if (variant) {
@@ -186,3 +141,48 @@ export const fetchMenuPageData = async (
   dispatch(setMenuPageData(data[0].sections[0].menu.course));
   setLoading(false);
 };
+
+// export const getEntryByUrl = ({
+//   contentTypeUid,
+//   entryUrl,
+//   referenceFieldPath,
+//   jsonRtePath,
+// }: GetEntryByUrl) => {
+//   return new Promise((resolve, reject) => {
+//     const blogQuery = Stack.ContentType(contentTypeUid).Query();
+//     if (referenceFieldPath) blogQuery.includeReference(referenceFieldPath);
+//     blogQuery.toJSON();
+//     const data = blogQuery.where("url", `${entryUrl}`).find();
+//     data.then(
+//       (result) => {
+//         if (jsonRtePath) {
+//           Utils.jsonToHTML({
+//             entry: result,
+//             paths: jsonRtePath,
+//             renderOption,
+//           });
+//         }
+//         resolve(result[0]);
+//       },
+//       (error) => {
+//         console.error(error);
+//         reject(error);
+//       }
+//     );
+//   });
+// };
+
+// function deserializeVariantIds(variantsQueryParam: string): string[] {
+//   return variantsQueryParam
+//     .split(",")
+//     .map((variantPair) => `cs_personalize_${variantPair.split("=").join("_")}`);
+// }
+
+// let entry;
+// if (variant) {
+//   const entryCall = entryQuery.where("url", `${entryUrl}`);
+//   entry = await entryCall.variants(deserializeVariantIds(variant)).find();
+//   // entry = await entryCall.variants(["cs_personalize_0_1"]).find();
+// } else {
+//   entry = await entryQuery.where("url", `${entryUrl}`).find();
+// }

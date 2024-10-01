@@ -9,8 +9,6 @@ import { fetchMenuPageData } from "@/api";
 import { onEntryChange } from "@/sdk/utils";
 import Personalize from "@contentstack/personalize-edge-sdk";
 
-export const dynamic = "force-dynamic";
-
 export default function Menu({
   searchParams,
 }: {
