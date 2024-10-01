@@ -16,7 +16,7 @@ export default function Menu({
 }: {
   searchParams: Record<string, string>;
 }) {
-  let variant = decodeURIComponent(
+  const variant = decodeURIComponent(
     searchParams[Personalize.VARIANT_QUERY_PARAM]
   );
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ export default function Menu({
     onEntryChange(() => {
       fetchMenuPageData(dispatch, variant, setLoading);
     });
-  }, [dispatch]);
+  }, [dispatch, variant]);
 
   const memoizedMenuPageData = useMemo(() => menuPageData, [menuPageData]);
 
