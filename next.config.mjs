@@ -15,6 +15,19 @@ const nextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "max-age=0, s-maxage=86400, must-revalidate",
+          },
+        ],
+      },
+    ];
+  },
   env: {
     CONTENTSTACK_API_KEY: process.env.CONTENTSTACK_API_KEY,
     CONTENTSTACK_DELIVERY_TOKEN: process.env.CONTENTSTACK_DELIVERY_TOKEN,
@@ -24,8 +37,8 @@ const nextConfig = {
     CONTENTSTACK_HOST_ENV: process.env.CONTENTSTACK_HOST_ENV,
     NEXT_PUBLIC_PERSONALIZATION_PROJECT_UID:
       process.env.NEXT_PUBLIC_PERSONALIZATION_PROJECT_UID,
-    CONTENTSTACK_PERSONALIZE_EDGE_API_URL:
-      process.env.CONTENTSTACK_PERSONALIZE_EDGE_API_URL,
+    NEXT_PUBLIC_CONTENTSTACK_PERSONALIZE_EDGE_API_URL:
+      process.env.NEXT_PUBLIC_CONTENTSTACK_PERSONALIZE_EDGE_API_URL,
   },
 };
 

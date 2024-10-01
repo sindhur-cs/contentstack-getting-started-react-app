@@ -10,6 +10,7 @@ import {
 import { initializeContentstackSdk } from "@/sdk/utils";
 import * as Utils from "@contentstack/utils";
 import { addEditableTags } from "@contentstack/utils";
+import Personalize from "@contentstack/personalize-edge-sdk";
 
 const Stack = initializeContentstackSdk();
 
@@ -85,11 +86,22 @@ export const getEntryByUrl = async ({
     if (referenceFieldPath) entryQuery.includeReference(referenceFieldPath);
     entryQuery.toJSON();
 
+    // let entry;
+    // if (variant) {
+    //   const entryCall = entryQuery.where("url", `${entryUrl}`);
+    //   entry = await entryCall.variants(deserializeVariantIds(variant)).find();
+    //   // entry = await entryCall.variants(["cs_personalize_0_1"]).find();
+    // } else {
+    //   entry = await entryQuery.where("url", `${entryUrl}`).find();
+    // }
+
     let entry;
     if (variant) {
       const entryCall = entryQuery.where("url", `${entryUrl}`);
-      entry = await entryCall.variants(deserializeVariantIds(variant)).find();
-      // entry = await entryCall.variants(["cs_personalize_0_1"]).find();
+      const variantAlias =
+        Personalize.variantParamToVariantAliases(variant).join(",");
+      console.log("variantAlias::::", variantAlias);
+      entry = await entryCall.variants(variantAlias).find();
     } else {
       entry = await entryQuery.where("url", `${entryUrl}`).find();
     }

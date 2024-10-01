@@ -416,7 +416,7 @@
   }
 
   .body {
-    display: flex;
+    /* display: flex; */
     font-family: sans-serif;
     min-height: calc(100vh - 70px);
     background: #fbf8f4;

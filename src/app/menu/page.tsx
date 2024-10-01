@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { ECLIPSE_VARIANTS_QUERY_PARAM_KEY } from "@/constants";
 import MenuCard from "@/components/menu/MenuCard";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
@@ -8,6 +7,9 @@ import { LoadingSkeleton } from "@/app/LoadingSkeleton";
 import { TMenu, TDishes } from "@/types";
 import { fetchMenuPageData } from "@/api";
 import { onEntryChange } from "@/sdk/utils";
+import Personalize from "@contentstack/personalize-edge-sdk";
+
+export const dynamic = "force-dynamic";
 
 export default function Menu({
   searchParams,
@@ -15,9 +17,8 @@ export default function Menu({
   searchParams: Record<string, string>;
 }) {
   let variant = decodeURIComponent(
-    searchParams[ECLIPSE_VARIANTS_QUERY_PARAM_KEY]
+    searchParams[Personalize.VARIANT_QUERY_PARAM]
   );
-
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState<number>(0);

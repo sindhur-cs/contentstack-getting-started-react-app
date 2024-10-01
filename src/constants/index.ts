@@ -6,5 +6,3 @@ export const CONTENT_TYPES = {
   DINNER: "dinner",
   PAGE: "page",
 };
-
-export const ECLIPSE_VARIANTS_QUERY_PARAM_KEY = "preference";

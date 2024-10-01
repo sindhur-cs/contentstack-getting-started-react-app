@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@contentstack/live-preview-utils": "file:contentstack-live-preview-utils-3.0.0.tgz",
-    "@contentstack/personalization-sdk-js": "file:contentstack-personalization-sdk-js-0.0.0-development.tgz",
+    "@contentstack/personalize-edge-sdk": "^1.0.1",
     "@contentstack/venus-components": "^2.2.4",
     "@reduxjs/toolkit": "^2.2.1",
     "contentstack": "^3.21.0",
