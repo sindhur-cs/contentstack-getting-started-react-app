@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // COMMENT: Add TMenu in below import statement
-import { TFooterData, THeaderData, THomePageData } from "../types";
+import { AboutText, ContactText, TFooterData, THeaderData, THomePageData, TMenu } from "../types";
 
 interface AppState {
   headerData: THeaderData;
   footerData: TFooterData;
   homePageData: THomePageData;
-  // COMMENT: Uncomment below line
-  // menuPageData: TMenu[];
+  menuPageData: TMenu[];
+  aboutPageData: AboutText;
+  contactPageData: ContactText;
 }
 
 const initialState: AppState = {
@@ -63,22 +64,30 @@ const initialState: AppState = {
     ],
   },
   // COMMENT: Uncomment below lines
-  // menuPageData: [
-  //   {
-  //     course_name: "",
-  //     dishes: [
-  //       {
-  //         uid: "",
-  //         image: {
-  //           url: "",
-  //         },
-  //         title: "",
-  //         description: "",
-  //         price: 0,
-  //       },
-  //     ],
-  //   },
-  // ],
+  menuPageData: [
+    {
+      course_name: "",
+      dishes: [
+        {
+          uid: "",
+          image: {
+            url: "",
+          },
+          title: "",
+          description: "",
+          price: 0,
+        },
+      ],
+    },
+  ],
+  aboutPageData: {
+    uid: "",
+    about: ""
+  },
+  contactPageData: {
+    uid: "",
+    contact: ""
+  }
 };
 
 const mainSlice = createSlice({
@@ -95,9 +104,15 @@ const mainSlice = createSlice({
       state.homePageData = action.payload;
     },
     // COMMENT: Uncomment below lines
-    // setMenuPageData: (state, action: PayloadAction<TMenu[]>) => {
-    //   state.menuPageData = action.payload;
-    // },
+    setMenuPageData: (state, action: PayloadAction<TMenu[]>) => {
+      state.menuPageData = action.payload;
+    },
+    setAboutPageData: (state, action: PayloadAction<AboutText>) => {
+      state.aboutPageData = action.payload;
+    },
+    setContactPageData: (state, action: PayloadAction<ContactText>) => {
+      state.contactPageData = action.payload;
+    }
   },
 });
 
@@ -106,7 +121,9 @@ export const {
   setFooterData,
   setHomePageData,
   // COMMENT: Uncomment below line
-  // setMenuPageData,
+  setMenuPageData,
+  setAboutPageData,
+  setContactPageData
 } = mainSlice.actions;
 
 export default mainSlice.reducer;

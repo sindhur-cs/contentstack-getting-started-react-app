@@ -1,1 +1,295 @@
-{"created_at":"2024-06-27T07:43:49.891Z","updated_at":"2024-07-01T06:42:17.209Z","title":"Page","uid":"page","_version":6,"inbuilt_class":false,"schema":[{"data_type":"text","display_name":"Title","field_metadata":{"_default":true,"version":3},"mandatory":true,"uid":"title","unique":true,"multiple":false,"non_localizable":false},{"data_type":"text","display_name":"URL","uid":"url","field_metadata":{"_default":true,"version":3},"multiple":false,"unique":false,"mandatory":true,"non_localizable":false},{"data_type":"blocks","display_name":"Sections","blocks":[{"title":"Home","uid":"home","schema":[{"data_type":"group","display_name":"Hero Section","field_metadata":{"description":"This Section is the Hero Section of the Home Page","instruction":"This Section is the Hero Section of the Home Page"},"schema":[{"data_type":"file","display_name":"Banner","uid":"banner","extensions":[],"field_metadata":{"description":"This is the Banner which appears on left side of the Hero Section","rich_text_type":"standard","instruction":"This is the Banner which appears on left side of the Hero Section"},"mandatory":false,"multiple":false,"non_localizable":false,"unique":false},{"data_type":"text","display_name":"Heading","uid":"heading","field_metadata":{"description":"The Heading of the Right Section of the Hero Section","default_value":"","instruction":"The Heading of the Right Section of the Hero Section","version":3},"format":"","error_messages":{"format":""},"mandatory":false,"multiple":false,"non_localizable":false,"unique":false},{"data_type":"text","display_name":"Description","uid":"description","field_metadata":{"description":"This provides the Description of our PlateStack Restaurant website","default_value":"","multiline":true,"instruction":"This provides the Description of our PlateStack Restaurant website","version":3},"format":"","error_messages":{"format":""},"mandatory":false,"multiple":false,"non_localizable":false,"unique":false},{"data_type":"text","display_name":"Primary CTA","uid":"primary_cta","field_metadata":{"description":"This is the Button which will take you the Primary Call to Action","default_value":"","instruction":"This is the Button which will take you the Primary Call to Action","version":3},"format":"","error_messages":{"format":""},"mandatory":false,"multiple":false,"non_localizable":false,"unique":false}],"uid":"hero_section","mandatory":false,"multiple":false,"non_localizable":false,"unique":false}]},{"title":"Menu","uid":"menu","schema":[{"data_type":"group","display_name":"Course","field_metadata":{"description":"This Group Consists of Dishes of a Respective Course","instruction":"This Group Consists of Dishes of a Respective Course"},"schema":[{"data_type":"text","display_name":"Course Name","uid":"course_name","field_metadata":{"description":"This Field represents the name of the course","default_value":"","instruction":"This Field represents the name of the course","version":3},"format":"","error_messages":{"format":""},"mandatory":false,"multiple":false,"non_localizable":false,"unique":false},{"data_type":"reference","display_name":"Dishes","reference_to":["dishes"],"field_metadata":{"ref_multiple":true,"ref_multiple_content_types":true,"description":"It is a reference to the Dishes of the Dishes Content Type","instruction":"It is a reference to the Dishes of the Dishes Content Type"},"uid":"dishes","mandatory":false,"multiple":false,"non_localizable":false,"unique":false}],"uid":"course","mandatory":false,"multiple":true,"non_localizable":false,"unique":false}]},{"title":"About","uid":"about","schema":[{"data_type":"text","display_name":"About","uid":"about","field_metadata":{"description":"It consists of the information about the PlateStack Restaurant","default_value":"","multiline":true,"instruction":"It consists of the information about the PlateStack Restaurant","version":3},"format":"","error_messages":{"format":""},"mandatory":false,"multiple":false,"non_localizable":false,"unique":false}]},{"title":"Contact","uid":"contact","schema":[{"data_type":"text","display_name":"Contact","uid":"contact","field_metadata":{"description":"It consists of the contact details of the PlateStack Restaurant","default_value":"","multiline":true,"instruction":"It consists of the contact details of the PlateStack Restaurant","version":3},"format":"","error_messages":{"format":""},"mandatory":false,"multiple":false,"non_localizable":false,"unique":false}]}],"multiple":true,"uid":"sections","field_metadata":{"instruction":"","description":"This Field Consists of Different Sections in Our PlateStack Restaurant Website"},"mandatory":false,"non_localizable":false,"unique":false}],"last_activity":{},"maintain_revisions":true,"description":"This Content Type consists of all the Different Pages in our Restaurant Menu Website","DEFAULT_ACL":[{"k":"others","v":{"read":false,"create":false}},{"k":"users.blt47ad574f3a472dcf","v":{"read":true,"sub_acl":{"read":true}}}],"SYS_ACL":{"roles":[]},"options":{"is_page":true,"singleton":false,"sub_title":[],"title":"title","url_pattern":false,"url_prefix":"/"},"abilities":{"get_one_object":true,"get_all_objects":true,"create_object":true,"update_object":true,"delete_object":true,"delete_all_objects":true}}
+{
+    "created_at": "2024-06-27T07:43:49.891Z",
+    "updated_at": "2024-07-01T06:42:17.209Z",
+    "title": "Page",
+    "uid": "page",
+    "_version": 6,
+    "inbuilt_class": false,
+    "schema": [
+        {
+            "data_type": "text",
+            "display_name": "Title",
+            "field_metadata": {
+                "_default": true,
+                "version": 3
+            },
+            "mandatory": true,
+            "uid": "title",
+            "unique": true,
+            "multiple": false,
+            "non_localizable": false
+        },
+        {
+            "data_type": "text",
+            "display_name": "URL",
+            "uid": "url",
+            "field_metadata": {
+                "_default": true,
+                "version": 3
+            },
+            "multiple": false,
+            "unique": false,
+            "mandatory": true,
+            "non_localizable": false
+        },
+        {
+            "data_type": "blocks",
+            "display_name": "Sections",
+            "blocks": [
+                {
+                    "title": "Home",
+                    "uid": "home",
+                    "schema": [
+                        {
+                            "data_type": "group",
+                            "display_name": "Hero Section",
+                            "field_metadata": {
+                                "description": "This Section is the Hero Section of the Home Page",
+                                "instruction": "This Section is the Hero Section of the Home Page"
+                            },
+                            "schema": [
+                                {
+                                    "data_type": "file",
+                                    "display_name": "Banner",
+                                    "uid": "banner",
+                                    "extensions": [],
+                                    "field_metadata": {
+                                        "description": "This is the Banner which appears on left side of the Hero Section",
+                                        "rich_text_type": "standard",
+                                        "instruction": "This is the Banner which appears on left side of the Hero Section"
+                                    },
+                                    "mandatory": false,
+                                    "multiple": false,
+                                    "non_localizable": false,
+                                    "unique": false
+                                },
+                                {
+                                    "data_type": "text",
+                                    "display_name": "Heading",
+                                    "uid": "heading",
+                                    "field_metadata": {
+                                        "description": "The Heading of the Right Section of the Hero Section",
+                                        "default_value": "",
+                                        "instruction": "The Heading of the Right Section of the Hero Section",
+                                        "version": 3
+                                    },
+                                    "format": "",
+                                    "error_messages": {
+                                        "format": ""
+                                    },
+                                    "mandatory": false,
+                                    "multiple": false,
+                                    "non_localizable": false,
+                                    "unique": false
+                                },
+                                {
+                                    "data_type": "text",
+                                    "display_name": "Description",
+                                    "uid": "description",
+                                    "field_metadata": {
+                                        "description": "This provides the Description of our PlateStack Restaurant website",
+                                        "default_value": "",
+                                        "multiline": true,
+                                        "instruction": "This provides the Description of our PlateStack Restaurant website",
+                                        "version": 3
+                                    },
+                                    "format": "",
+                                    "error_messages": {
+                                        "format": ""
+                                    },
+                                    "mandatory": false,
+                                    "multiple": false,
+                                    "non_localizable": false,
+                                    "unique": false
+                                },
+                                {
+                                    "data_type": "text",
+                                    "display_name": "Primary CTA",
+                                    "uid": "primary_cta",
+                                    "field_metadata": {
+                                        "description": "This is the Button which will take you the Primary Call to Action",
+                                        "default_value": "",
+                                        "instruction": "This is the Button which will take you the Primary Call to Action",
+                                        "version": 3
+                                    },
+                                    "format": "",
+                                    "error_messages": {
+                                        "format": ""
+                                    },
+                                    "mandatory": false,
+                                    "multiple": false,
+                                    "non_localizable": false,
+                                    "unique": false
+                                }
+                            ],
+                            "uid": "hero_section",
+                            "mandatory": false,
+                            "multiple": false,
+                            "non_localizable": false,
+                            "unique": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Menu",
+                    "uid": "menu",
+                    "schema": [
+                        {
+                            "data_type": "group",
+                            "display_name": "Course",
+                            "field_metadata": {
+                                "description": "This Group Consists of Dishes of a Respective Course",
+                                "instruction": "This Group Consists of Dishes of a Respective Course"
+                            },
+                            "schema": [
+                                {
+                                    "data_type": "text",
+                                    "display_name": "Course Name",
+                                    "uid": "course_name",
+                                    "field_metadata": {
+                                        "description": "This Field represents the name of the course",
+                                        "default_value": "",
+                                        "instruction": "This Field represents the name of the course",
+                                        "version": 3
+                                    },
+                                    "format": "",
+                                    "error_messages": {
+                                        "format": ""
+                                    },
+                                    "mandatory": false,
+                                    "multiple": false,
+                                    "non_localizable": false,
+                                    "unique": false
+                                },
+                                {
+                                    "data_type": "reference",
+                                    "display_name": "Dishes",
+                                    "reference_to": [
+                                        "dishes"
+                                    ],
+                                    "field_metadata": {
+                                        "ref_multiple": true,
+                                        "ref_multiple_content_types": true,
+                                        "description": "It is a reference to the Dishes of the Dishes Content Type",
+                                        "instruction": "It is a reference to the Dishes of the Dishes Content Type"
+                                    },
+                                    "uid": "dishes",
+                                    "mandatory": false,
+                                    "multiple": false,
+                                    "non_localizable": false,
+                                    "unique": false
+                                }
+                            ],
+                            "uid": "course",
+                            "mandatory": false,
+                            "multiple": true,
+                            "non_localizable": false,
+                            "unique": false
+                        }
+                    ]
+                },
+                {
+                    "title": "About",
+                    "uid": "about",
+                    "schema": [
+                        {
+                            "data_type": "text",
+                            "display_name": "About",
+                            "uid": "about",
+                            "field_metadata": {
+                                "description": "It consists of the information about the PlateStack Restaurant",
+                                "default_value": "",
+                                "multiline": true,
+                                "instruction": "It consists of the information about the PlateStack Restaurant",
+                                "version": 3
+                            },
+                            "format": "",
+                            "error_messages": {
+                                "format": ""
+                            },
+                            "mandatory": false,
+                            "multiple": false,
+                            "non_localizable": false,
+                            "unique": false
+                        }
+                    ]
+                },
+                {
+                    "title": "Contact",
+                    "uid": "contact",
+                    "schema": [
+                        {
+                            "data_type": "text",
+                            "display_name": "Contact",
+                            "uid": "contact",
+                            "field_metadata": {
+                                "description": "It consists of the contact details of the PlateStack Restaurant",
+                                "default_value": "",
+                                "multiline": true,
+                                "instruction": "It consists of the contact details of the PlateStack Restaurant",
+                                "version": 3
+                            },
+                            "format": "",
+                            "error_messages": {
+                                "format": ""
+                            },
+                            "mandatory": false,
+                            "multiple": false,
+                            "non_localizable": false,
+                            "unique": false
+                        }
+                    ]
+                }
+            ],
+            "multiple": true,
+            "uid": "sections",
+            "field_metadata": {
+                "instruction": "",
+                "description": "This Field Consists of Different Sections in Our PlateStack Restaurant Website"
+            },
+            "mandatory": false,
+            "non_localizable": false,
+            "unique": false
+        }
+    ],
+    "last_activity": {},
+    "maintain_revisions": true,
+    "description": "This Content Type consists of all the Different Pages in our Restaurant Menu Website",
+    "DEFAULT_ACL": [
+        {
+            "k": "others",
+            "v": {
+                "read": false,
+                "create": false
+            }
+        },
+        {
+            "k": "users.blt47ad574f3a472dcf",
+            "v": {
+                "read": true,
+                "sub_acl": {
+                    "read": true
+                }
+            }
+        }
+    ],
+    "SYS_ACL": {
+        "roles": []
+    },
+    "options": {
+        "is_page": true,
+        "singleton": false,
+        "sub_title": [],
+        "title": "title",
+        "url_pattern": false,
+        "url_prefix": "/"
+    },
+    "abilities": {
+        "get_one_object": true,
+        "get_all_objects": true,
+        "create_object": true,
+        "update_object": true,
+        "delete_object": true,
+        "delete_all_objects": true
+    }
+}

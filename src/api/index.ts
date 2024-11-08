@@ -1,15 +1,18 @@
 import { Dispatch } from "react";
 import { CONTENT_TYPES } from "../constants";
 import {
+  setAboutPageData,
+  setContactPageData,
   setFooterData,
   setHeaderData,
   setHomePageData,
   // COMMENT: Uncomment below line
-  // setMenuPageData,
+  setMenuPageData,
 } from "../reducer";
 import { initializeContentstackSdk } from "../sdk/utils";
 import * as Utils from "@contentstack/utils";
 
+// instance of the stack
 const Stack = initializeContentstackSdk();
 
 type GetEntryByUrl = {
@@ -108,16 +111,53 @@ export const fetchInitialData = async (
 
 // COMMENT: Uncomment below code
 
-// export const fetchMenuPageData = async (
-//   dispatch: Dispatch<any>,
-//   setLoading: (status: boolean) => void
-// ): Promise<void> => {
-//   const data: any = await getEntryByUrl({
-//     contentTypeUid: CONTENT_TYPES.PAGE,
-//     entryUrl: "/menu",
-//     referenceFieldPath: ["sections.menu.course.dishes"],
-//     jsonRtePath: undefined,
-//   });
-//   dispatch(setMenuPageData(data[0].sections[0].menu.course));
-//   setLoading(false);
-// };
+export const fetchMenuPageData = async (
+  dispatch: Dispatch<any>,
+  setLoading: (status: boolean) => void
+): Promise<void> => {
+  const data: any = await getEntryByUrl({
+    contentTypeUid: CONTENT_TYPES.PAGE,
+    entryUrl: "/menu",
+    referenceFieldPath: ["sections.menu.course.dishes"],
+    jsonRtePath: undefined,
+  });
+  dispatch(setMenuPageData(data[0].sections[0].menu.course));
+  setLoading(false);
+};
+
+
+export const fetchAboutPageData = async (
+  dispatch: Dispatch<any>,
+  setLoading: (status: boolean) => void
+) => {
+  const data: any = await getEntryByUrl({
+    contentTypeUid: CONTENT_TYPES.PAGE,
+    entryUrl: "/about-us",
+    referenceFieldPath: ["sections.about"],
+    jsonRtePath: undefined
+  });
+
+  console.log(data);
+  dispatch(setAboutPageData(data[0].sections[0].about));
+  setLoading(false);
+}
+
+export const fetchContactPage = async (
+  dispatch: Dispatch<any>,
+  setLoading: (status: boolean) => void
+) => {
+  // fetch from contentstack CMS -> sindhur-platestack
+  const data: any = await getEntryByUrl({
+    contentTypeUid: CONTENT_TYPES.PAGE,
+    entryUrl: "/contact",
+    referenceFieldPath: ["sections.contact"],
+    jsonRtePath: undefined
+  });
+
+  // update the state by dispatch an action
+  console.log(data);
+  dispatch(setContactPageData(data[0].sections[0].contact)); // dispatch a payload and update the initial state
+  
+  // stop loading
+  setLoading(false);
+}
