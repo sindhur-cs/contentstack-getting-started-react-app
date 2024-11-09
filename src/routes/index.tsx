@@ -12,13 +12,16 @@ import { NotFound } from "../components/NotFound";
 import Menu from "../components/menu/Menu";
 import About from "../components/about/About";
 import Contact from "../components/contact/Contact";
+import { onEntryChange } from "../sdk/utils";
 
 const AppRoutes: React.FC = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchInitialData(dispatch, setLoading);
+    onEntryChange(() => {
+      fetchInitialData(dispatch, setLoading);
+    });
   }, [dispatch]);
 
   return (

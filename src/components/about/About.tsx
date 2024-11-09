@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import LoadingScreen from "../LoadingScreen";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { onEntryChange } from "../../sdk/utils";
 
 const About = () => {
     const dispatch = useDispatch();
@@ -11,7 +12,9 @@ const About = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchAboutPageData(dispatch, setLoading);
+        onEntryChange(() => {
+            fetchAboutPageData(dispatch, setLoading);
+        });
     }, [dispatch]);
 
     const memoizedAboutData = useMemo(() => aboutData, [aboutData]);

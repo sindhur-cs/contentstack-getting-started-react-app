@@ -4,6 +4,7 @@ import { RootState } from "../../store";
 import { fetchContactPage } from "../../api";
 import LoadingScreen from "../LoadingScreen";
 import { useDispatch } from "react-redux";
+import { onEntryChange } from "../../sdk/utils";
 
 const Contact = () => {
     const dispatch = useDispatch();
@@ -11,7 +12,9 @@ const Contact = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchContactPage(dispatch, setLoading);
+        onEntryChange(() => {
+            fetchContactPage(dispatch, setLoading);
+        });
     }, [dispatch]);
 
     // memoize contact data 
