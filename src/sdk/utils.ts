@@ -1,35 +1,57 @@
 import Contentstack from "contentstack";
 import ContentstackLivePreview from "@contentstack/live-preview-utils";
 
-const getLivePreviewHostByRegion = (region: string) => {
-  switch (region) {
-    case "US":
-      return "rest-preview.contentstack.com";
-    case "EU":
-      return "eu-rest-preview.contentstack.com";
-    case "AZURE_NA":
-      return "azure-na-rest-preview.contentstack.com";
-    case "AZURE_EU":
-      return "azure-eu-rest-preview.contentstack.com";
-    default:
-      return "rest-preview.contentstack.com";
+const getModifiedHost = (baseHost: string, hostEnv?: string) => {
+  if (hostEnv) {
+    const [subdomain] = baseHost.split(".");
+    return `${hostEnv}-${subdomain}.csnonprod.com`;
   }
+  return baseHost;
 };
-const getHostByRegion = (region: string) => {
+
+const getLivePreviewHostByRegion = (region: string, hostEnv?: string) => {
+  let baseHost: string;
   switch (region) {
     case "US":
-      return "app.contentstack.com";
+      baseHost = "rest-preview.contentstack.com";
+      break;
     case "EU":
-      return "eu-app.contentstack.com";
+      baseHost = "eu-rest-preview.contentstack.com";
+      break;
     case "AZURE_NA":
-      return "azure-na-app.contentstack.com";
+      baseHost = "azure-na-rest-preview.contentstack.com";
+      break;
     case "AZURE_EU":
-      return "azure-eu-app.contentstack.com";
-    case "GCP_NA":
-      return "gcp-na-api.contentstack.com";
+      baseHost = "azure-eu-rest-preview.contentstack.com";
+      break;
     default:
-      return "app.contentstack.com";
+      baseHost = "rest-preview.contentstack.com";
   }
+  return getModifiedHost(baseHost, hostEnv);
+};
+
+const getHostByRegion = (region: string, hostEnv?: string) => {
+  let baseHost: string;
+  switch (region) {
+    case "US":
+      baseHost = "app.contentstack.com";
+      break;
+    case "EU":
+      baseHost = "eu-app.contentstack.com";
+      break;
+    case "AZURE_NA":
+      baseHost = "azure-na-app.contentstack.com";
+      break;
+    case "AZURE_EU":
+      baseHost = "azure-eu-app.contentstack.com";
+      break;
+    case "GCP_NA":
+      baseHost = "gcp-na-api.contentstack.com";
+      break;
+    default:
+      baseHost = "app.contentstack.com";
+  }
+  return getModifiedHost(baseHost, hostEnv);
 };
 
 export const initializeContentstackSdk = () => {
@@ -39,6 +61,7 @@ export const initializeContentstackSdk = () => {
     REACT_APP_CONTENTSTACK_ENVIRONMENT,
     REACT_APP_CONTENTSTACK_REGION,
     REACT_APP_CONTENTSTACK_PREVIEW_TOKEN,
+    REACT_APP_CONTENTSTACK_HOST_ENV,
   } = process.env;
 
   const region: Contentstack.Region | undefined = (function (
@@ -62,7 +85,7 @@ export const initializeContentstackSdk = () => {
 
   if (!region) {
     throw new Error(
-      "Invalid region provided in REACT_APP_CONTENTSTACK_REGION. Valid values are: " +
+      "Invalid region provided in CONTENTSTACK_REGION. Valid values are: " +
         Object.keys(Contentstack.Region).join(", ")
     );
   }
@@ -74,18 +97,29 @@ export const initializeContentstackSdk = () => {
     region: region,
     live_preview: {
       enable: true,
-      host: getLivePreviewHostByRegion(REACT_APP_CONTENTSTACK_REGION as string),
+      host: getLivePreviewHostByRegion(
+        REACT_APP_CONTENTSTACK_REGION as string,
+        REACT_APP_CONTENTSTACK_HOST_ENV
+      ),
       preview_token: REACT_APP_CONTENTSTACK_PREVIEW_TOKEN as string,
     },
   });
 
+  Stack.setHost(
+    getHostByRegion(
+      REACT_APP_CONTENTSTACK_REGION as string,
+      REACT_APP_CONTENTSTACK_HOST_ENV
+    )
+  );
+  // Stack.setHost("https://cdn.contentstack.io");
+
   ContentstackLivePreview.init({
-    stackSdk: Stack,
-    clientUrlParams: {
-      protocol: "https",
-      host: getHostByRegion(REACT_APP_CONTENTSTACK_REGION as string),
-      port: 443,
+    stackDetails: {
+      apiKey: REACT_APP_CONTENTSTACK_API_KEY,
+      environment: REACT_APP_CONTENTSTACK_ENVIRONMENT,
     },
+
+    mode: "builder",
     editButton: {
       enable: true,
       exclude: ["outsideLivePreviewPortal"],
