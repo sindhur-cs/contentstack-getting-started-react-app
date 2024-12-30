@@ -10,7 +10,7 @@ import { onEntryChange } from "../../sdk/utils";
 const Menu: React.FC = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [activeIndex, setActiveIndex] = useState<number>(0 ?? null);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const menuPageData = useSelector(
     (state: RootState) => state.main.menuPageData
