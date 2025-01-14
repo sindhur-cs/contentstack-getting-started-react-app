@@ -4,7 +4,7 @@ import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import Home from "../components/home/Home";
 import Menu from "../components/menu/Menu";
-// import Comp from "../components/Test";
+import Comp from "../components/Test";
 import { fetchInitialData } from "../api";
 import { useDispatch } from "react-redux";
 import LoadingScreen from "../components/LoadingScreen";
@@ -33,6 +33,7 @@ const AppRoutes: React.FC = () => {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/menu" element={<Menu />} />
+                <Route path="/test" element={<Comp />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
