@@ -111,7 +111,7 @@ export const initializeContentstackSdk = () => {
       REACT_APP_CONTENTSTACK_HOST_ENV
     )
   );
-  // Stack.setHost("https://cdn.contentstack.io");
+  // Stack.setHost("https://gcp-eu-cdn.contentstack.com");
 
   ContentstackLivePreview.init({
     stackDetails: {
