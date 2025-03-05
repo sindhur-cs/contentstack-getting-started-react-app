@@ -20,11 +20,14 @@
     "react-router": "^6.22.2",
     "react-router-dom": "^6.22.2",
     "react-scripts": "5.0.1",
+    "source-map-explorer": "^2.5.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "prod:build": "REACT_APP_PURGE_PREVIEW_SDK=true npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
