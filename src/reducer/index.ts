@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TFooterData, THeaderData, THomePageData, TMenu } from "../types";
+import { TDishReference, TFooterData, THeaderData, THomePageData, TMenu } from "../types";
 
 interface AppState {
   headerData: THeaderData;
   footerData: TFooterData;
   homePageData: THomePageData;
   menuPageData: TMenu[];
+  productsDetailsData: TDishReference[]
 }
 
 const initialState: AppState = {
@@ -154,10 +155,13 @@ const initialState: AppState = {
           title: "",
           description: "",
           price: 0,
+          _content_type_uid: "",
+          product_image_reference: []
         },
       ],
     },
   ],
+  productsDetailsData: []
 };
 
 const mainSlice = createSlice({
@@ -176,6 +180,12 @@ const mainSlice = createSlice({
     setMenuPageData: (state, action: PayloadAction<TMenu[]>) => {
       state.menuPageData = action.payload;
     },
+    setProductDetailsData: (state, action: PayloadAction<TDishReference>) => {
+      const ifProductFound = state.productsDetailsData.find(state => state.uid === action.payload.uid);
+      if(!ifProductFound) {
+        state.productsDetailsData.push(action.payload);
+      }
+    },
   },
 });
 
@@ -184,6 +194,7 @@ export const {
   setFooterData,
   setHomePageData,
   setMenuPageData,
+  setProductDetailsData
 } = mainSlice.actions;
 
 export default mainSlice.reducer;

@@ -100,6 +100,28 @@ export type TLink = {
   title: string;
 };
 
+interface ProductImage {
+  $: {
+    uid: {
+      "data-cslp": string;
+    },
+    _content_type_uid: {
+      "data-cslp": string;
+    }
+  },
+  uid: string;
+  _content_type_uid: string;
+  product_details: {
+    dietary_preference: string;
+    protein: string;
+    serving_temperature: string;
+  },
+  alt_text: string;
+  image: {
+    url: string;
+  }
+}
+
 export type TDishes = {
   $: {
     title: {
@@ -124,6 +146,9 @@ export type TDishes = {
   title: string;
   description: string;
   price: number;
+  _content_type_uid: string;
+  combos?: TDishes[],
+  product_image_reference?: ProductImage[] | []
 };
 
 export type TMenu = {
@@ -135,3 +160,18 @@ export type TMenu = {
   course_name: string;
   dishes: TDishes[];
 };
+
+type ProductDetails = {
+  dietary_preference: string;
+  protein: string;
+  serving_temperature: string;
+}
+
+export type TDishReference = {
+  uid: string,
+  alt_text: string,
+  product_details: ProductDetails;
+  image : {
+    url: string;
+  }
+}

@@ -19,6 +19,12 @@ type GetEntryByUrl = {
   jsonRtePath: string[] | undefined;
 };
 
+type GetEntryByUid = {
+  entryUid: string;
+  contentTypeUid: string;
+  include: boolean
+};
+
 const renderOption = {
   span: (node: any, next: any) => next(node.children),
 };
@@ -63,6 +69,32 @@ export const getEntryByUrl = ({
     );
   });
 };
+
+export const getEntryByUid = async ({
+  contentTypeUid,
+  entryUid,
+  include
+}: GetEntryByUid) => {
+  const Query = await Stack.ContentType(contentTypeUid).Entry(entryUid);
+
+  if(include) {
+    Query.includeReference("product_image_reference");
+  }
+
+  // when dishes include the combos references as well
+  if(include && contentTypeUid === "dishes") {
+    Query.includeReference("combos", "combos.product_image_reference");
+  }
+
+  return Query.toJSON()
+  .fetch()
+  .then((entry) => {
+    return entry;
+  })
+  .catch((err: any) => {
+    return {};
+  })
+}
 
 export const fetchHeaderData = async (
   dispatch: Dispatch<any>
