@@ -100,7 +100,7 @@ export type TLink = {
   title: string;
 };
 
-interface ProductImage {
+export type ProductImage = {
   $: {
     uid: {
       "data-cslp": string;
