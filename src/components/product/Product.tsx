@@ -180,15 +180,15 @@ const Product = () => {
                             value={fat || ""}
                         />
                         <Detail
-                            label="Fat"
+                            label="Sugar"
                             value={sugar || ""}
                         />
                         <Detail
-                            label="Fat"
+                            label="Sodium"
                             value={sodium || ""}
                         />
                         <Detail
-                            label="Fat"
+                            label="Carbohydrates"
                             value={carbohydrates || ""}
                         />
                     </div>
