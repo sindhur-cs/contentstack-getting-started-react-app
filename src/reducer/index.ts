@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TFooterData, THeaderData, THomePageData, TMenu } from "../types";
+import { TAsset, TFooterData, THeaderData, THomePageData, TMenu } from "../types";
 
 interface AppState {
   headerData: THeaderData;
   footerData: TFooterData;
   homePageData: THomePageData;
   menuPageData: TMenu[];
+  assetMetadata: TAsset[];
 }
 
 const initialState: AppState = {
@@ -129,7 +130,7 @@ const initialState: AppState = {
         },
       },
       course_name: "",
-      dishes: [
+      beverages: [
         {
           $: {
             title: {
@@ -154,10 +155,12 @@ const initialState: AppState = {
           title: "",
           description: "",
           price: 0,
+          _content_type_uid: ""
         },
       ],
     },
   ],
+  assetMetadata: []
 };
 
 const mainSlice = createSlice({
@@ -176,6 +179,9 @@ const mainSlice = createSlice({
     setMenuPageData: (state, action: PayloadAction<TMenu[]>) => {
       state.menuPageData = action.payload;
     },
+    setAssetMetadata: (state, action: PayloadAction<TAsset>) => {
+      state.assetMetadata = [...state.assetMetadata, action.payload];
+    }
   },
 });
 
@@ -184,6 +190,7 @@ export const {
   setFooterData,
   setHomePageData,
   setMenuPageData,
+  setAssetMetadata
 } = mainSlice.actions;
 
 export default mainSlice.reducer;

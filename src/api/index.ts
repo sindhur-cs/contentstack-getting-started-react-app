@@ -116,7 +116,7 @@ export const fetchMenuPageData = async (
   const data: any = await getEntryByUrl({
     contentTypeUid: CONTENT_TYPES.PAGE,
     entryUrl: "/menu",
-    referenceFieldPath: ["sections.menu.course.dishes"],
+    referenceFieldPath: ["sections.menu.course.beverages"],
     jsonRtePath: undefined,
   });
   addEditableTags(data[0], CONTENT_TYPES.PAGE, true, "en-us");

@@ -100,6 +100,28 @@ export type TLink = {
   title: string;
 };
 
+type ProductImage = {
+  $: {
+    uid: {
+      "data-cslp": string;
+    },
+    _content_type_uid: {
+      "data-cslp": string;
+    }
+  },
+  uid: string;
+  _content_type_uid: string;
+  product_details: {
+    dietary_preference: string;
+    protein: string;
+    serving_temperature: string;
+  },
+  alt_text: string;
+  image: {
+    url: string;
+  }
+}
+
 export type TDishes = {
   $: {
     title: {
@@ -124,6 +146,7 @@ export type TDishes = {
   title: string;
   description: string;
   price: number;
+  _content_type_uid: string;
 };
 
 export type TMenu = {
@@ -133,5 +156,55 @@ export type TMenu = {
     };
   };
   course_name: string;
-  dishes: TDishes[];
+  beverages: TDishes[];
+};
+
+export type TAsset = {
+    uid: string;
+    file_name: string;
+    asset_id: string;
+    parent_uid: string;
+    org_uid: string;
+    space_uid: string;
+    is_dir: boolean;
+    path: {
+        uid: string;
+        title: string;
+    }[];
+    version: number;
+    permanent_url_slug: string | null;
+    owner_uid: string;
+    title: string;
+    description: string;
+    content_type: string;
+    file_size: number;
+    dimensions: {
+        width: number;
+        height: number;
+    };
+    created_at: string;
+    updated_at: string;
+    created_by: string;
+    updated_by: string;
+    tags: string[];
+    locale: string;
+    custom_metadata: {
+        media_set_id: string;
+        alttext: string;
+        nutrition_information: {
+            energy: string;
+            protein: string;
+            carbohydrates: string;
+            sodium: string;
+            sugar: string;
+            fat: string;
+        };
+        content_uid: string;
+    };
+    asset_type: {
+        uid: string;
+        title: string;
+    };
+    url: string;
+    space_name: string;
 };

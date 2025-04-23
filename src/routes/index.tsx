@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import LoadingScreen from "../components/LoadingScreen";
 import { NotFound } from "../components/NotFound";
 import { onEntryChange } from "../sdk/utils";
+import Product from "../components/product/Product";
 
 const AppRoutes: React.FC = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const AppRoutes: React.FC = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/menu" element={<Menu />} />
                 <Route path="/test" element={<Comp />} />
+                <Route path={`/:product/:id`} element={<Product/>}/>
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>

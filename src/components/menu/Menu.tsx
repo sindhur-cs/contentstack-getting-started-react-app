@@ -24,7 +24,7 @@ const Menu: React.FC = () => {
   const memoizedMenuPageData = useMemo(() => menuPageData, [menuPageData]);
 
   const categories = memoizedMenuPageData?.map((course: TMenu) => course);
-  const dishes = memoizedMenuPageData?.map((course: TMenu) => course.dishes);
+  const dishes = memoizedMenuPageData?.map((course: TMenu) => course.beverages);
   const flatDishes: TDishes[] = dishes
     ?.flat()
     .filter(
@@ -51,7 +51,7 @@ const Menu: React.FC = () => {
     <div className="menu-page">
       <div className="menu-heading">
         <span className="line1">Discover</span>
-        <h1 className="line2">{styleAlternateWords("Our Dining Menu")}</h1>
+        <h1 className="line2">{styleAlternateWords("Our Beverages Menu")}</h1>
       </div>
       <div className="categories">
         {loading ? (
@@ -59,19 +59,12 @@ const Menu: React.FC = () => {
         ) : (
           <>
             <div className="category">
-              <p
-                key="cat-0"
-                className={activeIndex === 0 ? "active" : ""}
-                onClick={() => setActiveIndex(0)}
-              >
-                ALL CATEGORIES
-              </p>
               {categories?.map((category, index) => (
                 <p
                   {...category.$.course_name}
-                  key={`cat-${index + 1}`}
-                  className={activeIndex === index + 1 ? "active" : ""}
-                  onClick={() => setActiveIndex(index + 1)}
+                  key={`cat-${index}`}
+                  className={activeIndex === index ? "active" : ""}
+                  onClick={() => setActiveIndex(index)}
                 >
                   {category.course_name}
                 </p>
@@ -83,11 +76,7 @@ const Menu: React.FC = () => {
 
       {!loading && (
         <div className="card-section">
-          {activeIndex === 0 ? (
-            <MenuCard data={flatDishes} />
-          ) : (
-            <MenuCard data={dishes[activeIndex - 1]} />
-          )}
+          <MenuCard data={dishes[activeIndex]} />
         </div>
       )}
     </div>
