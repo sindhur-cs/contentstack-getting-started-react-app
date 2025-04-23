@@ -19,7 +19,7 @@ const Product = () => {
     const [entry, setEntry] = useState<TAsset | null>(null);
     const [menuItem, setMenuItem] = useState<TDishes | null>(null);
     const [relatedEntries, setRelatedEntries] = useState<TAsset[]>([]);
-    const [isLoading, setIsLoading] =  useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -34,14 +34,14 @@ const Product = () => {
                         parent_uid: mediaId
                     })
                 });
-    
+
                 const responseData = await response.json();
-                
+
                 const relatedEntries = responseData.assets.filter((asset: TAsset) => asset.custom_metadata.content_uid !== id);
 
                 setRelatedEntries(relatedEntries);
             }
-            catch(error) {
+            catch (error) {
                 console.log(error);
             }
             finally {
@@ -57,12 +57,12 @@ const Product = () => {
                     headers: DAM_API.headers,
                     body: JSON.stringify(DAM_API.payload)
                 });
-    
+
                 const responseData = await response.json();
-                
+
                 return responseData?.assets?.find((asset: TAsset) => asset.custom_metadata.content_uid === id);
             }
-            catch(error) {
+            catch (error) {
                 console.log(error);
             }
         }
@@ -80,10 +80,10 @@ const Product = () => {
 
                 const ifAssetPresent = await getCurrentAsset();
 
-                if(ifAssetPresent) {
+                if (ifAssetPresent) {
                     setEntry(ifAssetPresent);
                     const mediaId = ifAssetPresent.custom_metadata.media_set_id;
-                    if(mediaId && mediaId.length > 0) {
+                    if (mediaId && mediaId.length > 0) {
                         getAllCombosInMedia(mediaId);
                     }
                     else {
@@ -92,91 +92,108 @@ const Product = () => {
                     }
                 }
             }
-            catch(error) {
+            catch (error) {
                 console.log(error);
             }
         }
 
-        if(product && id) {
+        if (product && id) {
             initialiseAsset(product, id);
         }
     }, [id]);
 
-    if(isLoading) {
+    if (isLoading) {
         return (
-            <LoadingScreen/>
+            <LoadingScreen />
         );
     }
 
-    return (
-        <div className="menu-page">
-            {entry ? (
-                <div className="product-container">
-                    <div>
-                        <div className="product-image-container">
-                            <img 
-                                src={entry?.url} 
-                                alt={entry?.custom_metadata.alttext} 
-                                className="product-image"
-                            />
-                        </div>
-                        
-                        {relatedEntries && relatedEntries.length > 0 && (
-                            <div className="product-image-grid">
-                                {relatedEntries.map((entry, index) => (
-                                    <div 
-                                        key={entry.uid || index}
-                                        className="product-combo-container"
-                                        onClick={() => navigate(`/combos/${entry.custom_metadata.content_uid}`)}
-                                    >
-                                        <img 
-                                            src={entry.url} 
-                                            alt={entry.custom_metadata.alttext} 
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="product-details-container">
-                        <h1 className="product-title">{menuItem?.title}</h1>
-                        <div className="product-price">${menuItem?.price}</div>
-                        <p className="product-description">{menuItem?.description}</p>
-                        <h3 className="product-section-heading">Nutritionary Information</h3>
-                        <div className="product-details-grid">
-                            <Detail 
-                                label="Energy" 
-                                value={entry.custom_metadata.nutrition_information.energy || ""} 
-                            />
-                            <Detail 
-                                label="Protein" 
-                                value={entry.custom_metadata.nutrition_information.protein || ""} 
-                            />
-                            <Detail 
-                                label="Fat" 
-                                value={entry.custom_metadata.nutrition_information.fat || ""} 
-                            />
-                            <Detail 
-                                label="Fat" 
-                                value={entry.custom_metadata.nutrition_information.sugar || ""} 
-                            />
-                            <Detail 
-                                label="Fat" 
-                                value={entry.custom_metadata.nutrition_information.sodium || ""} 
-                            />
-                            <Detail 
-                                label="Fat" 
-                                value={entry.custom_metadata.nutrition_information.carbohydrates || ""} 
-                            />
-                        </div>
-                    </div>
-                </div>
-            ) : (
+    if (!entry) {
+        return (
+            <div className="menu-page">
                 <div className="product-not-found">
                     No {product} found
                 </div>
-            )}
+            </div>
+        );
+    }
+
+    const { custom_metadata: { 
+        alttext, 
+        content_uid, 
+        nutrition_information: {
+            energy,
+            protein,
+            fat,
+            sugar,
+            sodium,
+            carbohydrates
+        }
+    }, uid, url } = entry;
+
+    return (
+        <div className="menu-page">
+            <div className="product-container">
+                <div>
+                    <div className="product-image-container">
+                        <img
+                            src={url}
+                            alt={alttext}
+                            className="product-image"
+                        />
+                    </div>
+
+                    {relatedEntries && relatedEntries.length > 0 && (
+                        <div className="product-image-grid">
+                            {relatedEntries.map((entry, index) => (
+                                <div
+                                    key={uid || index}
+                                    className="product-combo-container"
+                                    onClick={() => navigate(`/combos/${entry.custom_metadata.content_uid}`)}
+                                >
+                                    <img
+                                        src={entry.url}
+                                        alt={entry.custom_metadata.alttext}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="product-details-container">
+                    <h1 className="product-title">{menuItem?.title}</h1>
+                    <div className="product-price">${menuItem?.price}</div>
+                    <p className="product-description">{menuItem?.description}</p>
+                    <h3 className="product-section-heading">Nutritionary Information</h3>
+                    <div className="product-details-grid">
+                        <Detail
+                            label="Energy"
+                            value={energy || ""}
+                        />
+                        <Detail
+                            label="Protein"
+                            value={protein || ""}
+                        />
+                        <Detail
+                            label="Fat"
+                            value={fat || ""}
+                        />
+                        <Detail
+                            label="Fat"
+                            value={sugar || ""}
+                        />
+                        <Detail
+                            label="Fat"
+                            value={sodium || ""}
+                        />
+                        <Detail
+                            label="Fat"
+                            value={carbohydrates || ""}
+                        />
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
