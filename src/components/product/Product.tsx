@@ -165,7 +165,7 @@ const Product = () => {
                     <h1 className="product-title">{menuItem?.title}</h1>
                     <div className="product-price">${menuItem?.price}</div>
                     <p className="product-description">{menuItem?.description}</p>
-                    <h3 className="product-section-heading">Nutritionary Information</h3>
+                    <h3 className="product-section-heading">Nutritional Information</h3>
                     <div className="product-details-grid">
                         <Detail
                             label="Energy"
