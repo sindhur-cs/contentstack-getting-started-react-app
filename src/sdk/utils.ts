@@ -34,7 +34,7 @@ const getHostByRegion = (region: string, hostEnv?: string) => {
   let baseHost: string;
   switch (region) {
     case "US":
-      baseHost = "app.contentstack.com";
+      baseHost = "dev9-app.csnonprod.com";
       break;
     case "EU":
       baseHost = "eu-app.contentstack.com";
