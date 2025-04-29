@@ -1,5 +1,6 @@
 import Contentstack from "contentstack";
 import ContentstackLivePreview from "@contentstack/live-preview-utils";
+import * as contentstack from '@contentstack/management'
 
 const getModifiedHost = (baseHost: string, hostEnv?: string) => {
   if (hostEnv) {
@@ -129,6 +130,18 @@ export const initializeContentstackSdk = () => {
   });
 
   return Stack;
+};
+
+export const initializeContentstackManagementSdk = () => {
+  // custom host -> dev9
+  const contentstackClient = contentstack.client({
+    host: "dev9-app.csnonprod.com"
+  });
+  const stack = contentstackClient.stack({ 
+    api_key: process.env.REACT_APP_CONTENTSTACK_API_KEY as string, 
+    management_token:  process.env.REACT_APP_MANAGEMENT_TOKEN as string
+  });
+  return stack;
 };
 
 export const onEntryChange = ContentstackLivePreview.onEntryChange;

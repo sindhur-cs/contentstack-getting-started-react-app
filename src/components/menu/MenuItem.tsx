@@ -6,6 +6,9 @@ import { useNavigate } from "react-router";
 import { DAM_API } from "../../apiconfig";
 import { setAssetMetadata } from "../../reducer";
 import Spinner from '../Spinner';
+import { getCMAEntry, getCMAEntryByUid } from "../../api";
+import LoadingScreen from "../LoadingScreen";
+import LoadingSkeleton from "../LoadingSkeleton";
 
 const Detail = ({ label, value }: { label: string, value: string }) => {
     return <div style={{
@@ -138,13 +141,28 @@ const ImageComponent = ({ asset, isOpen, setIsOpen, isAlt, setIsAlt }: { asset: 
     );
 }
 
-const MenuItem = ({ menuItem }: { menuItem: TDishes }) => {
+const MenuItem = ({ menuItemProp }: { menuItemProp: TDishes }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isAlt, setIsAlt] = useState(false);
     const globalAssets = useSelector((state: RootState) => state.main.assetMetadata);
     const [asset, setAsset] = useState<TAsset | null>(null);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    // const menuItem = menuItemProp;
+
+    // CMA
+    const [menuItem, setMenuItem] = useState<{
+        uid: string;
+        content_type_uid: string;
+        price: number;
+        title: string;
+        description: string;
+        $: {
+            price: number[],
+            description: string[],
+            title: string[]
+        }
+    } | null>(null);
 
     useEffect(() => {
         // fetch image info using DAM call
@@ -163,7 +181,7 @@ const MenuItem = ({ menuItem }: { menuItem: TDishes }) => {
 
                 const { assets } = responseData;
 
-                const currAsset = assets.find((asset: any) => asset.custom_metadata.content_uid === menuItem.uid);
+                const currAsset = assets.find((asset: any) => asset.custom_metadata.content_uid === menuItemProp.uid);
 
                 setAsset(currAsset);
 
@@ -174,7 +192,7 @@ const MenuItem = ({ menuItem }: { menuItem: TDishes }) => {
             }
         }
 
-        const ifAssetPresent = globalAssets.find((asset: any) => asset?.custom_metadata.content_uid === menuItem.uid);
+        const ifAssetPresent = globalAssets.find((asset: any) => asset?.custom_metadata.content_uid === menuItemProp.uid);
 
         if (!ifAssetPresent) {
             fetchData();
@@ -184,17 +202,27 @@ const MenuItem = ({ menuItem }: { menuItem: TDishes }) => {
         }
     }, []);
 
+    useEffect(() => {
+        // fetch the references as CMA does not allow includeReferences() or include_all
+        const fetchReferences = async () => {
+            const data = await getCMAEntryByUid(menuItemProp._content_type_uid, menuItemProp.uid);
+            setMenuItem(data);
+        }
+
+        fetchReferences();
+    }, []);
+
     return (
-        <div id={menuItem.uid} className="menu-card-item menu-item" onClick={() => navigate(`/${menuItem._content_type_uid}/${menuItem?.uid}`)}>
+        <div id={menuItemProp?.uid} className="menu-card-item menu-item" onClick={() => navigate(`/${menuItemProp?._content_type_uid}/${menuItemProp?.uid}`)}>
             <ImageComponent asset={asset} isOpen={isOpen} setIsOpen={setIsOpen} isAlt={isAlt} setIsAlt={setIsAlt}/>
-            <div className="item-content">
+            {menuItem ? <div className="item-content">
                 <div className="item-content-text">
-                    <span {...menuItem.$.price} className="price">
-                        ${menuItem.price}
+                    <span {...menuItem?.$?.price} className="price">
+                        ${menuItem?.price}
                     </span>
-                    <p {...menuItem.$.title}>{menuItem.title}</p>
-                    <span {...menuItem.$.description} className="description">
-                        {menuItem.description}
+                    <p {...menuItem?.$?.title}>{menuItem?.title}</p>
+                    <span {...menuItem?.$?.description} className="description">
+                        {menuItem?.description}
                     </span>
                 </div>
                 <hr
@@ -205,7 +233,7 @@ const MenuItem = ({ menuItem }: { menuItem: TDishes }) => {
                         border: "none",
                     }}
                 />
-            </div>
+            </div> : null}
         </div>
     )
 }

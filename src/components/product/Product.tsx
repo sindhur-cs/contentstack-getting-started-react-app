@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { TAsset, TDishes } from "../../types";
 import LoadingScreen from "../LoadingScreen";
 import { DAM_API } from "../../apiconfig";
-import { getEntry } from "../../api";
+import { getCMAEntry, getEntry } from "../../api";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 
@@ -69,8 +69,15 @@ const Product = () => {
 
         // get asset content from the stack for price, description, etc
         async function getAssetContent(contentTypeUid: string, entryUrl: string) {
-            const response: TDishes[][] = await getEntry(contentTypeUid);
-            return response?.[0]?.find((res: TDishes) => res.uid === entryUrl) || null;
+            // cda
+            // const response: TDishes[][] = await getEntry(contentTypeUid);
+            // return response?.[0]?.find((res: TDishes) => res.uid === entryUrl) || null;
+
+            // cma
+            const response = await getCMAEntry(contentTypeUid);
+            if(Array.isArray(response)) {
+                return response.find((res: TDishes) => res.uid === entryUrl) || null;
+            }
         }
 
         async function initialiseAsset(product: string, id: string) {

@@ -100,28 +100,6 @@ export type TLink = {
   title: string;
 };
 
-type ProductImage = {
-  $: {
-    uid: {
-      "data-cslp": string;
-    },
-    _content_type_uid: {
-      "data-cslp": string;
-    }
-  },
-  uid: string;
-  _content_type_uid: string;
-  product_details: {
-    dietary_preference: string;
-    protein: string;
-    serving_temperature: string;
-  },
-  alt_text: string;
-  image: {
-    url: string;
-  }
-}
-
 export type TDishes = {
   $: {
     title: {

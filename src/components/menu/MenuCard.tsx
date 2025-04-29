@@ -6,7 +6,7 @@ const MenuCard: React.FC<{ data: TDishes[] }> = ({ data }) => {
     <div className="menu-card">
       {data ? (
         data.map((menuItem: TDishes) => (
-          <MenuItem key={menuItem.uid} menuItem={menuItem}/>
+          <MenuItem key={menuItem.uid} menuItemProp={menuItem}/>
         ))
       ) : (
         <></>

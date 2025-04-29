@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { LoadingSkeleton } from "../LoadingSkeleton";
 import { TMenu, TDishes } from "../../types";
-import { fetchMenuPageData } from "../../api";
+import { fetchCMAMenuPageData, fetchMenuPageData } from "../../api";
 import { onEntryChange } from "../../sdk/utils";
 
 const Menu: React.FC = () => {
@@ -17,7 +17,7 @@ const Menu: React.FC = () => {
   );
   useEffect(() => {
     onEntryChange(() => {
-      fetchMenuPageData(dispatch, setLoading);
+      fetchCMAMenuPageData(dispatch, setLoading);
     });
   }, [dispatch]);
 
@@ -25,6 +25,7 @@ const Menu: React.FC = () => {
 
   const categories = memoizedMenuPageData?.map((course: TMenu) => course);
   const dishes = memoizedMenuPageData?.map((course: TMenu) => course.beverages);
+  console.log("Dishes", dishes, categories);
   const flatDishes: TDishes[] = dishes
     ?.flat()
     .filter(
