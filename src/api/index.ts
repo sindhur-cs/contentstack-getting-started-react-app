@@ -13,6 +13,24 @@ import { addEditableTags } from "@contentstack/utils";
 const Stack = initializeContentstackSdk();
 const CmaStack = initializeContentstackManagementSdk();
 
+const entryuids = [
+  ["beverages", "blta731e4b806a082da"],
+  ["beverages", "blte85de550a9c317e2"], 
+  ["beverages", "blta48e59ea0120aae0"], 
+  ["beverages", "bltd2735c5350123258"],
+  ["beverages", "blt6266a887e6d1d2ae"],
+  ["beverages", "bltcca8bd6c8899c4e7"],
+  ["combos", "bltc1233f77d71bd6e6"], 
+  ["combos", "blt098db4f4c0194b34"],
+  ["combos", "bltcc0cbb5b9509ded4"],
+  ["combos", "bltbd0db6fc7a4c11ea"],
+  ["combos", "blt1a650fa55b700e26"],
+  ["page", "blt52268218c0c386ed"],
+  ["page", "blted95b6b9909b91f8"],
+  ["footer", "bltba6f4a94433308ae"],
+  ["header", "blt806b6de69b2e6436"]
+]
+
 type GetEntryByUrl = {
   entryUrl: string | undefined;
   contentTypeUid: string;
@@ -36,32 +54,34 @@ export const getEntry = (contentType: string) => {
     });
 };
 
-export const getCMAEntry = (contentType: string) => {
-  const Query = CmaStack.contentType(contentType).entry().query()
-  return Query
-  .find()
-  .then((entry: any) => {
-    console.log(entry.items);
-    return entry.items;
-  })
-  .catch((err: any) => {
-    return {};
-  });
+export const getCMAEntry = async (contentType: string) => {
+  const matchingEntries = entryuids.filter((entryuid) => entryuid[0] === contentType);
+  const entries = await Promise.all(
+    matchingEntries.map(async (entryuid) => {
+      try {
+        const Query = CmaStack.contentType(contentType).entry(entryuid[1]);
+        const entry = await Query.fetch();
+        return entry;
+      } catch (err) {
+        console.error(err);
+        return null;
+      }
+    })
+  );
+  return entries.filter(entry => entry !== null);
 };
 
 export const getCMAEntryByUid = (contentType: string, entryUrl: string) => {
   const Query = CmaStack.contentType(contentType).entry(entryUrl).fetch();
-  
-  return Query
-  .then((entry: any) => {
-    console.log(entry);
-    return entry;
-  })
-  .catch((err: any) => {
-    return {};
-  });
-};
 
+  return Query
+    .then((entry: any) => {
+      return entry;
+    })
+    .catch((err: any) => {
+      return {};
+    });
+};
 
 export const getEntryByUrl = ({
   contentTypeUid,
@@ -99,28 +119,20 @@ export const getCMAEntryByUrl = ({
   jsonRtePath,
 }: GetEntryByUrl) => {
   return new Promise((resolve, reject) => {
-    const blogQuery = CmaStack.contentType(contentTypeUid).entry().query();
-    blogQuery.find()
-      .then((result) => {
-        if (result.items && result.items.length > 0) {
-          jsonRtePath &&
-            Utils.jsonToHTML({
-              entry: result.items[0],
-              paths: jsonRtePath,
-              renderOption,
-            });
-
-          const resultBasedOnUrl = result.items.find(item => item.url === entryUrl);
-
-          resolve(resultBasedOnUrl);
-        } else {
-          reject(new Error("No entry found"));
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        reject(error);
-      });
+    entryuids.filter((entryuid) => entryuid[0] === contentTypeUid).forEach(async (entryuid) => {
+      const blogQuery = CmaStack.contentType(contentTypeUid).entry(entryuid[1]);
+      blogQuery.fetch()
+        .then((result) => {
+          const resultBasedOnUrl = result.url === entryUrl ? result : null;
+          if (resultBasedOnUrl) {
+            resolve(resultBasedOnUrl);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          reject(error);
+        });
+    });
   });
 };
 
@@ -136,11 +148,11 @@ export const fetchCMAHeaderData = async (
   dispatch: Dispatch<any>
 ): Promise<void> => {
   const data = await getCMAEntry(CONTENT_TYPES.HEADER);
-  if(Array.isArray(data)) {
+  if (Array.isArray(data) && data[0]) {
     addEditableTags(data[0], CONTENT_TYPES.HEADER, true, "en-us");
     const serializableData = {
-      logo: data[0].logo,
-      navigation_links: data[0].navigation_links
+      logo: data[0]?.logo,
+      navigation_links: data[0]?.navigation_links
     };
     dispatch(setHeaderData(serializableData));
   }
@@ -157,14 +169,14 @@ export const fetchFooterData = async (
 export const fetchCMAFooterData = async (
   dispatch: Dispatch<any>
 ): Promise<void> => {
-  const data = await getCMAEntry(CONTENT_TYPES.FOOTER);
-  if(Array.isArray(data)) {
+  const data = await getCMAEntry(CONTENT_TYPES.FOOTER);   
+  if (Array.isArray(data) && data[0]) {
     addEditableTags(data[0], CONTENT_TYPES.FOOTER, true, "en-us");
     const serializableData = {
-      $: data[0].$,
-      navigation_links: data[0].navigation_links,
-      information_section: data[0].information_section,
-      copyright: data[0].copyright
+      $: data[0]?.$,
+      navigation_links: data[0]?.navigation_links,
+      information_section: data[0]?.information_section,
+      copyright: data[0]?.copyright
     };
     dispatch(setFooterData(serializableData));
   }
@@ -192,21 +204,30 @@ export const fetchCMAHomePageData = async (
     referenceFieldPath: undefined,
     jsonRtePath: undefined,
   });
-  addEditableTags(data, CONTENT_TYPES.PAGE, true, "en-us");
-  const serializableData = {
-    sections: [{
-      home: {
-        hero_section: {
-          $: data.sections?.[0]?.home?.hero_section?.$,
-          banner: data.sections?.[0]?.home?.hero_section?.banner,
-          heading: data.sections?.[0]?.home?.hero_section?.heading,
-          description: data.sections?.[0]?.home?.hero_section?.description,
-          primary_cta: data.sections?.[0]?.home?.hero_section?.primary_cta
+  if (!data) {
+    dispatch(setHomePageData({
+      sections: [{
+        home: {}
+      }]
+    }));
+  }
+  else {
+    addEditableTags(data, CONTENT_TYPES.PAGE, true, "en-us");
+    const serializableData = {
+      sections: [{
+        home: {
+          hero_section: {
+            $: data.sections?.[0]?.home?.hero_section?.$,
+            banner: data.sections?.[0]?.home?.hero_section?.banner,
+            heading: data.sections?.[0]?.home?.hero_section?.heading,
+            description: data.sections?.[0]?.home?.hero_section?.description,
+            primary_cta: data.sections?.[0]?.home?.hero_section?.primary_cta
+          }
         }
-      }
-    }]
-  };
-  dispatch(setHomePageData(serializableData));
+      }]
+    };
+    dispatch(setHomePageData(serializableData));
+  }
 };
 
 export const fetchInitialData = async (
@@ -253,7 +274,13 @@ export const fetchCMAMenuPageData = async (
     referenceFieldPath: ["sections.menu.course.beverages"],
     jsonRtePath: undefined,
   });
-  addEditableTags(data, CONTENT_TYPES.PAGE, true, "en-us");
-  dispatch(setMenuPageData(data.sections[0].menu.course));
+
+  if (!data) {
+    dispatch(setMenuPageData([]));
+  }
+  else {
+    addEditableTags(data, CONTENT_TYPES.PAGE, true, "en-us");
+    dispatch(setMenuPageData(data.sections[0].menu.course));
+  }
   setLoading(false);
 };

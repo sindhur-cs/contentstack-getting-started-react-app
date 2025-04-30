@@ -68,39 +68,44 @@ const Product = () => {
         }
 
         // get asset content from the stack for price, description, etc
-        async function getAssetContent(contentTypeUid: string, entryUrl: string) {
-            // cda
-            // const response: TDishes[][] = await getEntry(contentTypeUid);
-            // return response?.[0]?.find((res: TDishes) => res.uid === entryUrl) || null;
-
-            // cma
-            const response = await getCMAEntry(contentTypeUid);
-            if(Array.isArray(response)) {
-                return response.find((res: TDishes) => res.uid === entryUrl) || null;
+        const getAssetContent = async (product: string, id: string) => {
+            try {
+                const contentTypeUid = product === "beverages" ? "beverages" : "combos";
+                const entryUrl = id;
+                const response = await getCMAEntry(contentTypeUid);
+                if(Array.isArray(response)) {
+                    const foundItem = response.find((res) => res?.uid === entryUrl) as TDishes | undefined;
+                    return foundItem || null;
+                }
+                return null;
+            } catch (error) {
+                console.error(error);
+                return null;
             }
-        }
+        };
 
         async function initialiseAsset(product: string, id: string) {
             try {
                 const content = await getAssetContent(product, id);
-                setMenuItem(content);
+                if (content) {
+                    setMenuItem(content as TDishes);
+                    const ifAssetPresent = await getCurrentAsset();
 
-                const ifAssetPresent = await getCurrentAsset();
-
-                if (ifAssetPresent) {
-                    setEntry(ifAssetPresent);
-                    const mediaId = ifAssetPresent.custom_metadata.media_set_id;
-                    if (mediaId && mediaId.length > 0) {
-                        getAllCombosInMedia(mediaId);
-                    }
-                    else {
-                        setRelatedEntries([]);
-                        setIsLoading(false);
+                    if (ifAssetPresent) {
+                        setEntry(ifAssetPresent);
+                        const mediaId = ifAssetPresent.custom_metadata.media_set_id;
+                        if (mediaId && mediaId.length > 0) {
+                            getAllCombosInMedia(mediaId);
+                        }
+                        else {
+                            setRelatedEntries([]);
+                            setIsLoading(false);
+                        }
                     }
                 }
             }
             catch (error) {
-                console.log(error);
+                console.error(error);
             }
         }
 
