@@ -139,7 +139,7 @@ export const initializeContentstackManagementSdk = () => {
   });
   const stack = contentstackClient.stack({ 
     api_key: process.env.REACT_APP_CONTENTSTACK_API_KEY as string, 
-    management_token:  process.env.REACT_APP_MANAGEMENT_TOKEN as string
+    management_token: process.env.REACT_APP_MANAGEMENT_TOKEN as string
   });
   return stack;
 };

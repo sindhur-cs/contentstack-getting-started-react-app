@@ -186,3 +186,33 @@ export type TAsset = {
     url: string;
     space_name: string;
 };
+
+export type Image = {
+  url: string;
+  custom_metadata: {
+      alttext: string;
+      content_uid: string;
+      nutrition_information: {
+          carbohydrates: string;
+          energy: string;
+          fat: string;
+          protein: string;
+          sodium: string;
+          sugar: string;
+      }
+  }
+}
+
+export type TData = {
+  uid: string;
+  content_type_uid: string;
+  price: number;
+  title: string;
+  description: string;
+  image: Image | Image[],
+  $: {
+      price: number[],
+      description: string[],
+      title: string[]
+  }
+}

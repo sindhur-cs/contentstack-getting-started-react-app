@@ -1,11 +1,8 @@
-import { redirect, useNavigate, useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { useEffect, useState } from "react";
-import { TAsset, TDishes } from "../../types";
+import { Image, TData } from "../../types";
 import LoadingScreen from "../LoadingScreen";
-import { DAM_API } from "../../apiconfig";
-import { getCMAEntry, getEntry } from "../../api";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { getCMAEntryByUid } from "../../api";
 
 const Detail = ({ label, value }: { label: string, value: string }) => {
     return <div className="product-detail">
@@ -16,103 +13,26 @@ const Detail = ({ label, value }: { label: string, value: string }) => {
 
 const Product = () => {
     const { product, id } = useParams();
-    const [entry, setEntry] = useState<TAsset | null>(null);
-    const [menuItem, setMenuItem] = useState<TDishes | null>(null);
-    const [relatedEntries, setRelatedEntries] = useState<TAsset[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+    const [entry, setEntry] = useState<TData | null>(null);
 
     useEffect(() => {
-        // get the related combos based on media id
-        async function getAllCombosInMedia(mediaId: string) {
-            try {
-                const response = await fetch(DAM_API.url, {
-                    method: "POST",
-                    headers: DAM_API.headers,
-                    body: JSON.stringify({
-                        ...DAM_API.payload,
-                        parent_uid: mediaId
-                    })
-                });
-
-                const responseData = await response.json();
-
-                const relatedEntries = responseData.assets.filter((asset: TAsset) => asset.custom_metadata.content_uid !== id);
-
-                setRelatedEntries(relatedEntries);
-            }
-            catch (error) {
-                console.log(error);
-            }
-            finally {
+        try {
+            const fetchProduct = async () => {
+                const data = await getCMAEntryByUid(product as string, id as string);
+                setEntry(data);
                 setIsLoading(false);
             }
-        }
 
-        // get the current asset from dam for the media id and custom metadata
-        async function getCurrentAsset() {
-            try {
-                const response = await fetch(DAM_API.url, {
-                    method: "POST",
-                    headers: DAM_API.headers,
-                    body: JSON.stringify(DAM_API.payload)
-                });
-
-                const responseData = await response.json();
-
-                return responseData?.assets?.find((asset: TAsset) => asset.custom_metadata.content_uid === id);
-            }
-            catch (error) {
-                console.log(error);
+            if (product && id) {
+                fetchProduct();
             }
         }
-
-        // get asset content from the stack for price, description, etc
-        const getAssetContent = async (product: string, id: string) => {
-            try {
-                const contentTypeUid = product === "beverages" ? "beverages" : "combos";
-                const entryUrl = id;
-                const response = await getCMAEntry(contentTypeUid);
-                if(Array.isArray(response)) {
-                    const foundItem = response.find((res) => res?.uid === entryUrl) as TDishes | undefined;
-                    return foundItem || null;
-                }
-                return null;
-            } catch (error) {
-                console.error(error);
-                return null;
-            }
-        };
-
-        async function initialiseAsset(product: string, id: string) {
-            try {
-                const content = await getAssetContent(product, id);
-                if (content) {
-                    setMenuItem(content as TDishes);
-                    const ifAssetPresent = await getCurrentAsset();
-
-                    if (ifAssetPresent) {
-                        setEntry(ifAssetPresent);
-                        const mediaId = ifAssetPresent.custom_metadata.media_set_id;
-                        if (mediaId && mediaId.length > 0) {
-                            getAllCombosInMedia(mediaId);
-                        }
-                        else {
-                            setRelatedEntries([]);
-                            setIsLoading(false);
-                        }
-                    }
-                }
-            }
-            catch (error) {
-                console.error(error);
-            }
+        catch (error) {
+            console.log(error);
         }
-
-        if (product && id) {
-            initialiseAsset(product, id);
-        }
-    }, [id]);
+    }, []);
 
     if (isLoading) {
         return (
@@ -130,18 +50,31 @@ const Product = () => {
         );
     }
 
-    const { custom_metadata: { 
-        alttext, 
-        content_uid, 
-        nutrition_information: {
-            energy,
-            protein,
-            fat,
-            sugar,
-            sodium,
-            carbohydrates
+    const image = Array.isArray(entry.image) ? entry.image[0] : entry.image;
+
+    const { 
+        uid, 
+        image: {
+            url,
+            custom_metadata: {
+                alttext,
+                nutrition_information: {
+                    energy,
+                    protein,
+                    fat,
+                    sugar,
+                    sodium,
+                    carbohydrates
+                }
+            }
         }
-    }, uid, url } = entry;
+    } = { ...entry, image };
+
+    let relatedEntries: Image[] = [];
+
+    if (Array.isArray(entry.image)) {
+        relatedEntries = entry.image.slice(1, entry.image.length);
+    }
 
     return (
         <div className="menu-page">
@@ -161,7 +94,7 @@ const Product = () => {
                                 <div
                                     key={uid || index}
                                     className="product-combo-container"
-                                    onClick={() => navigate(`/combos/${entry.custom_metadata.content_uid}`)}
+                                    // onClick={() => navigate(`/${product === "beverages" ? "combos" : "beverages"}/${entry.custom_metadata.content_uid}`)}
                                 >
                                     <img
                                         src={entry.url}
@@ -174,9 +107,9 @@ const Product = () => {
                 </div>
 
                 <div className="product-details-container">
-                    <h1 className="product-title">{menuItem?.title}</h1>
-                    <div className="product-price">${menuItem?.price}</div>
-                    <p className="product-description">{menuItem?.description}</p>
+                    <h1 className="product-title">{entry?.title}</h1>
+                    <div className="product-price">${entry?.price}</div>
+                    <p className="product-description">{entry?.description}</p>
                     <h3 className="product-section-heading">Nutritional Information</h3>
                     <div className="product-details-grid">
                         <Detail
