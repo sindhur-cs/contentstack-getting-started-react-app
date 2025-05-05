@@ -1,8 +1,9 @@
-import { useNavigate, useParams } from "react-router"
+import { useParams } from "react-router"
 import { useEffect, useState } from "react";
 import { Image, TData } from "../../types";
 import LoadingScreen from "../LoadingScreen";
-import { getCMAEntryByUid } from "../../api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 const Detail = ({ label, value }: { label: string, value: string }) => {
     return <div className="product-detail">
@@ -14,25 +15,14 @@ const Detail = ({ label, value }: { label: string, value: string }) => {
 const Product = () => {
     const { product, id } = useParams();
     const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
     const [entry, setEntry] = useState<TData | null>(null);
+    const data = useSelector((state: RootState) => state.main.beverages);
 
     useEffect(() => {
-        try {
-            const fetchProduct = async () => {
-                const data = await getCMAEntryByUid(product as string, id as string);
-                setEntry(data);
-                setIsLoading(false);
-            }
-
-            if (product && id) {
-                fetchProduct();
-            }
-        }
-        catch (error) {
-            console.log(error);
-        }
-    }, []);
+        const currEntry = data.find((data) => data.uid === id) || null;
+        setEntry(currEntry);
+        setIsLoading(false);
+    }, [data, id]);
 
     if (isLoading) {
         return (
@@ -50,30 +40,35 @@ const Product = () => {
         );
     }
 
-    const image = Array.isArray(entry.image) ? entry.image[0] : entry.image;
+    let image: Image | Image[] | null = entry.image;
 
-    const { 
-        uid, 
-        image: {
-            url,
-            custom_metadata: {
-                alttext,
-                nutrition_information: {
-                    energy,
-                    protein,
-                    fat,
-                    sugar,
-                    sodium,
-                    carbohydrates
-                }
+    if(Array.isArray(entry.image)) {
+        image = entry.image.find((image) => image.custom_metadata.combo_menu_flag === (entry.content_type_uid === "beverages" ? "No" : "Yes")) || null;
+    }
+
+    if(!image) {
+        return null;
+    }
+
+    const {
+        url,
+        custom_metadata: {
+            alttext,
+            nutrition_information: {
+                energy,
+                protein,
+                fat,
+                sugar,
+                sodium,
+                carbohydrates
             }
         }
-    } = { ...entry, image };
+    } = image as Image;
 
     let relatedEntries: Image[] = [];
 
     if (Array.isArray(entry.image)) {
-        relatedEntries = entry.image.slice(1, entry.image.length);
+        relatedEntries = entry.image.filter((image) => image.custom_metadata.combo_menu_flag === "Yes");
     }
 
     return (
@@ -88,17 +83,28 @@ const Product = () => {
                         />
                     </div>
 
-                    {relatedEntries && relatedEntries.length > 0 && (
+                    {entry?.content_type_uid !== "combos" &&relatedEntries && relatedEntries.length > 0 && (
                         <div className="product-image-grid">
-                            {relatedEntries.map((entry, index) => (
+                            {relatedEntries.map((relatedEntry, index) => (
                                 <div
-                                    key={uid || index}
+                                    key={index}
                                     className="product-combo-container"
-                                    // onClick={() => navigate(`/${product === "beverages" ? "combos" : "beverages"}/${entry.custom_metadata.content_uid}`)}
+                                    onClick={(e) => {
+                                        setEntry({
+                                            uid: "",
+                                            content_type_uid: "combos",
+                                            price: entry.price,
+                                            title: entry.title,
+                                            description: relatedEntry.custom_metadata.alttext,
+                                            image: relatedEntry,
+                                            $: entry.$
+                                        });
+                                    }}
                                 >
+                                    <div className="combo-ribbon">Combo</div>
                                     <img
-                                        src={entry.url}
-                                        alt={entry.custom_metadata.alttext}
+                                        src={relatedEntry.url}
+                                        alt={relatedEntry.custom_metadata.alttext}
                                     />
                                 </div>
                             ))}
@@ -107,7 +113,10 @@ const Product = () => {
                 </div>
 
                 <div className="product-details-container">
-                    <h1 className="product-title">{entry?.title}</h1>
+                    <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                        <h1 className="product-title">{entry?.title}</h1>
+                        {entry?.content_type_uid === "combos" && <span className="product-sub-title">Save more with combo</span>}
+                    </div>
                     <div className="product-price">${entry?.price}</div>
                     <p className="product-description">{entry?.description}</p>
                     <h3 className="product-section-heading">Nutritional Information</h3>

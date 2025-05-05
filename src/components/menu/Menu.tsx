@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { LoadingSkeleton } from "../LoadingSkeleton";
 import { TMenu, TDishes } from "../../types";
-import { fetchCMAMenuPageData, fetchMenuPageData } from "../../api";
+import { fetchCMAMenuPageData } from "../../api";
 import { onEntryChange } from "../../sdk/utils";
 
 const Menu: React.FC = () => {
@@ -60,7 +60,9 @@ const Menu: React.FC = () => {
         ) : (
           <>
             <div className="category">
-              {categories?.map((category, index) => (
+              {categories
+                // ?.filter((category) => category.course_name !== "COMBOS") // filter combos out
+                ?.map((category, index) => (
                 <p
                   {...category.$.course_name}
                   key={`cat-${index}`}

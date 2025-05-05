@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TAsset, TData, TFooterData, THeaderData, THomePageData, TMenu } from "../types";
+import { TData, TDishes, TFooterData, THeaderData, THomePageData, TMenu } from "../types";
 
 interface AppState {
   headerData: THeaderData;
   footerData: TFooterData;
   homePageData: THomePageData;
   menuPageData: TMenu[];
+  beverages: TData[];
 }
 
 const initialState: AppState = {
@@ -159,6 +160,7 @@ const initialState: AppState = {
       ],
     },
   ],
+  beverages: localStorage.getItem("beverages") ? JSON.parse(localStorage.getItem("beverages") || "[]") : [],
 };
 
 const mainSlice = createSlice({
@@ -177,6 +179,9 @@ const mainSlice = createSlice({
     setMenuPageData: (state, action: PayloadAction<TMenu[]>) => {
       state.menuPageData = action.payload;
     },
+    setBeverages: (state, action: PayloadAction<TData[]>) => {
+      state.beverages = action.payload;
+    },
   },
 });
 
@@ -185,6 +190,7 @@ export const {
   setFooterData,
   setHomePageData,
   setMenuPageData,
+  setBeverages
 } = mainSlice.actions;
 
 export default mainSlice.reducer;

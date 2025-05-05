@@ -191,6 +191,7 @@ export type Image = {
   url: string;
   custom_metadata: {
       alttext: string;
+      combo_menu_flag: string;
       content_uid: string;
       nutrition_information: {
           carbohydrates: string;
@@ -211,8 +212,8 @@ export type TData = {
   description: string;
   image: Image | Image[],
   $: {
-      price: number[],
-      description: string[],
-      title: string[]
+    price: number[],
+    description: string[],
+    title: string[]
   }
 }

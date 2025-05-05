@@ -1,4 +1,4 @@
-import { TAsset, TData } from "../../types";
+import { Image, TData } from "../../types";
 import Spinner from "../Spinner";
 
 const Detail = ({ label, value }: { label: string, value: string }) => {
@@ -23,19 +23,30 @@ const ImageComponent = ({ asset, isOpen, setIsOpen, isAlt, setIsAlt }: { asset: 
         </div>
     }
 
-    const image = Array.isArray(asset.image) ? asset.image[0] : asset.image;
-    
-    const { url, custom_metadata: {
-        alttext,
-        nutrition_information: {
-            energy,
-            protein,
-            carbohydrates,
-            sugar,
-            sodium,
-            fat
-        }
-    } } = image;
+    let image: Image | Image[] | null = asset.image;
+
+    if(Array.isArray(asset.image)) {
+        image = asset.image.find((image) => image.custom_metadata.combo_menu_flag === (asset.content_type_uid === "beverages" ? "No" : "Yes")) || null;
+    }
+
+    if(!image) {
+        return null;
+    }
+
+    const { 
+        url, 
+        custom_metadata: {
+            alttext,
+            nutrition_information: {
+                energy,
+                protein,
+                carbohydrates,
+                sugar,
+                sodium,
+                fat
+            }
+        } 
+    } = image as Image;
 
     return (
         <div

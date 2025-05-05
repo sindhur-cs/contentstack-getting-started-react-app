@@ -1,24 +1,21 @@
 import { useEffect, useState } from "react";
 import { TData, TDishes } from "../../types";
 import { useNavigate } from "react-router";
-import { getCMAEntryByUid } from "../../api";
 import ImageComponent from "./ImageComponent";
+import { RootState } from "../../store";
+import { useSelector } from "react-redux";
 
 const MenuItem = ({ menuItemProp }: { menuItemProp: TDishes }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isAlt, setIsAlt] = useState(false);
     const navigate = useNavigate();
     const [menuItem, setMenuItem] = useState<TData | null>(null);
+    const data = useSelector((state: RootState) => state.main.beverages);
 
     useEffect(() => {
-        // fetch the references as CMA does not allow includeReferences() or include_all
-        const fetchReferences = async () => {
-            const data = await getCMAEntryByUid(menuItemProp._content_type_uid, menuItemProp.uid);
-            setMenuItem(data);
-        }
-
-        fetchReferences();
-    }, []);
+        const currEntry = data.find((data) => data.uid === menuItemProp.uid) || null;
+        setMenuItem(currEntry);
+    }, [data, menuItemProp]);
 
     return (
         <div id={menuItemProp?.uid} className="menu-card-item menu-item" onClick={() => navigate(`/${menuItemProp?._content_type_uid}/${menuItemProp?.uid}`)}>

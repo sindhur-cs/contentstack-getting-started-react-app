@@ -1,6 +1,7 @@
 import { Dispatch } from "react";
 import { CONTENT_TYPES } from "../constants";
 import {
+  setBeverages,
   setFooterData,
   setHeaderData,
   setHomePageData,
@@ -252,7 +253,23 @@ export const fetchCMAMenuPageData = async (
     referenceFieldPath: ["sections.menu.course.beverages"],
     jsonRtePath: undefined,
   });
+
+  const beverages: any[] = [];
+
+  await Promise.all(data.sections[0].menu.course.map(async (course: any) => {
+    await Promise.all(course.beverages.map(async (beverage: any) => {
+      const beverageData = await getCMAEntryByUid(beverage._content_type_uid, beverage.uid);
+      if(beverages.find(beverage => beverage.uid === beverageData.uid)) {
+        return;
+      }
+      beverages.push(beverageData);
+    }));
+  }));
+
+  localStorage.setItem("beverages", JSON.stringify(beverages));
+
   addEditableTags(data, CONTENT_TYPES.PAGE, true, "en-us");
   dispatch(setMenuPageData(data.sections[0].menu.course));
+  dispatch(setBeverages(beverages));
   setLoading(false);
 };
