@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TDishReference, TFooterData, THeaderData, THomePageData, TMenu } from "../types";
+import { TDishes, TDishReference, TFooterData, THeaderData, THomePageData, TMenu } from "../types";
 
 interface AppState {
   headerData: THeaderData;
   footerData: TFooterData;
   homePageData: THomePageData;
   menuPageData: TMenu[];
-  productsDetailsData: TDishReference[]
+  dishesData: TDishes[];
+  productsDetailsData: TDishReference[];
 }
 
 const initialState: AppState = {
@@ -161,7 +162,8 @@ const initialState: AppState = {
       ],
     },
   ],
-  productsDetailsData: []
+  dishesData: localStorage.getItem("dishesData") ? JSON.parse(localStorage.getItem("dishesData") || "[]") : [],
+  productsDetailsData: localStorage.getItem("productsDetailsData") ? JSON.parse(localStorage.getItem("productsDetailsData") || "[]") : []
 };
 
 const mainSlice = createSlice({
@@ -180,10 +182,18 @@ const mainSlice = createSlice({
     setMenuPageData: (state, action: PayloadAction<TMenu[]>) => {
       state.menuPageData = action.payload;
     },
+    setDishesData: (state, action: PayloadAction<TDishes>) => {
+      const ifDishFound = state.dishesData.find(state => state.uid === action.payload.uid);
+      if(!ifDishFound) {
+        state.dishesData.push(action.payload);
+        localStorage.setItem("dishesData", JSON.stringify(state.dishesData));
+      }
+    },
     setProductDetailsData: (state, action: PayloadAction<TDishReference>) => {
       const ifProductFound = state.productsDetailsData.find(state => state.uid === action.payload.uid);
       if(!ifProductFound) {
         state.productsDetailsData.push(action.payload);
+        localStorage.setItem("productsDetailsData", JSON.stringify(state.productsDetailsData));
       }
     },
   },
@@ -194,6 +204,7 @@ export const {
   setFooterData,
   setHomePageData,
   setMenuPageData,
+  setDishesData,
   setProductDetailsData
 } = mainSlice.actions;
 

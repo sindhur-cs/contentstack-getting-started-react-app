@@ -1,8 +1,10 @@
 import { useNavigate, useParams } from "react-router"
 import { useEffect, useState } from "react";
 import { ProductImage, TDishes } from "../../types";
-import { getEntryByUid } from "../../api";
 import LoadingScreen from "../LoadingScreen";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { convertToProductImage } from "../../lib/utils";
 
 const Detail = ({ label, value }: { label: string, value: string }) => {
     return <div className="product-detail">
@@ -14,33 +16,48 @@ const Detail = ({ label, value }: { label: string, value: string }) => {
 const Product = () => {
     const { product, id } = useParams();
     const [entry, setEntry] = useState<TDishes | null>(null);
+    const [productDetails, setProductDetails] = useState<ProductImage | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [combos, setCombos] = useState<TDishes[]>([]);
+    const dishesData = useSelector((state: RootState) => state.main.dishesData);
+    const productDetailsData = useSelector((state: RootState) => state.main.productsDetailsData);
     const navigate = useNavigate();
 
+    const findProductDetails = (uid: string) => {
+        return productDetailsData.find((product) => product.uid === uid) || null;
+    };
+
+    const processCombos = (dish: TDishes) => {
+        setCombos([]);
+        dish?.combos?.forEach((combo) => {
+            const comboDetails = dishesData.find((dish) => dish.uid === combo.uid) || null;
+            const comboProductDetails = findProductDetails(comboDetails?.product_image_reference?.[0]?.uid || '');
+            
+            if (comboDetails && comboProductDetails) {
+                setCombos((prev) => [...prev, {
+                    ...comboDetails,
+                    product_image_reference: [convertToProductImage(comboProductDetails)]
+                }]);
+            }
+        });
+    };
+
     useEffect(() => {
-        if (product && id) {
-            getEntryByUid({ contentTypeUid: product, entryUid: id, include: true })
-                .then(data => {
-                    console.log(data, product, id);
-                    setEntry(data);
-                })
-                .catch(error => {
-                    console.log(error);
-                    setEntry(null);
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                })
+        const dish = dishesData.find((dish) => dish.uid === id) || null;
+        if (dish) {
+            const details = findProductDetails(dish.product_image_reference?.[0]?.uid || '');
+            setEntry(dish);
+            setProductDetails(details ? convertToProductImage(details) : null);
+            processCombos(dish);
         }
+        setIsLoading(false);
     }, [id]);
 
     if (isLoading) {
-        return (
-            <LoadingScreen />
-        );
+        return <LoadingScreen />;
     }
 
-    if (!entry) {
+    if (!entry || !productDetails) {
         return (
             <div className="menu-page">
                 <div className="product-not-found">
@@ -50,25 +67,8 @@ const Product = () => {
         );
     }
 
-    const { 
-        product_image_reference, 
-        title, 
-        price, 
-        description, 
-        combos 
-    } = entry;
-
-    const { 
-        image: { 
-            url
-        }, 
-        alt_text, 
-        product_details: { 
-            dietary_preference, 
-            protein, 
-            serving_temperature 
-        }
-    } = product_image_reference?.[0] as ProductImage;
+    const { title, price, description } = entry;
+    const { image: { url }, alt_text, product_details: { dietary_preference, protein, serving_temperature } } = productDetails;
 
     return (
         <div className="menu-page">

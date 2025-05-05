@@ -1,6 +1,7 @@
 import { Dispatch } from "react";
 import { CONTENT_TYPES } from "../constants";
 import {
+  setDishesData,
   setFooterData,
   setHeaderData,
   setHomePageData,
@@ -9,6 +10,7 @@ import {
 import { initializeContentstackSdk } from "../sdk/utils";
 import * as Utils from "@contentstack/utils";
 import { addEditableTags } from "@contentstack/utils";
+import { TDishes, TMenu } from "../types";
 
 const Stack = initializeContentstackSdk();
 
@@ -152,6 +154,13 @@ export const fetchMenuPageData = async (
     jsonRtePath: undefined,
   });
   addEditableTags(data[0], CONTENT_TYPES.PAGE, true, "en-us");
+  
+  data[0].sections[0].menu.course.forEach((course: TMenu) => {
+    course.dishes.forEach((dish: TDishes) => {
+      dispatch(setDishesData(dish));
+    });
+  });
+  
   dispatch(setMenuPageData(data[0].sections[0].menu.course));
   setLoading(false);
 };
