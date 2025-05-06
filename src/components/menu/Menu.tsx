@@ -61,7 +61,7 @@ const Menu: React.FC = () => {
           <>
             <div className="category">
               {categories
-                // ?.filter((category) => category.course_name !== "COMBOS") // filter combos out
+                ?.filter((category) => category.course_name !== "COMBOS") // filter combos out
                 ?.map((category, index) => (
                 <p
                   {...category.$.course_name}
