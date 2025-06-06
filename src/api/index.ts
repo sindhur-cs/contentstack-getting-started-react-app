@@ -261,7 +261,7 @@ export const fetchCampaignPageData = async () => {
       method: "GET",
       headers: {
         api_key: process.env.REACT_APP_CONTENTSTACK_API_KEY || "",
-        access_token: process.env.REACT_APP_ACCESS_TOKEN || "",
+        access_token: process.env.REACT_APP_CONTENTSTACK_DELIVERY_TOKEN || "",
         "Content-Type": "application/json"
       }
     });
