@@ -243,6 +243,36 @@ export const fetchMenuPageData = async (
   setLoading(false);
 };
 
+export const fetchCampaignPageData = async () => {
+  /*
+  const Query = Stack.ContentType(contentType).Query();
+  return Query.toJSON()
+    .find()
+    .then((entry) => {
+      return entry;
+    })
+    .catch((err: any) => {
+      return {};
+    });
+  */
+
+  try {
+    const data = await fetch(process.env.REACT_APP_CDN_API || "", {
+      method: "GET",
+      headers: {
+        api_key: process.env.REACT_APP_CONTENTSTACK_API_KEY || "",
+        access_token: process.env.REACT_APP_ACCESS_TOKEN || "",
+        "Content-Type": "application/json"
+      }
+    });
+    const result = await data.json();
+    return result;
+  }
+  catch(error) {
+    console.log(error);
+  }
+}
+
 export const fetchCMAMenuPageData = async (
   dispatch: Dispatch<any>,
   setLoading: (status: boolean) => void

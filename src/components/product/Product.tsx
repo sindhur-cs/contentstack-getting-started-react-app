@@ -4,6 +4,8 @@ import { Image, TData } from "../../types";
 import LoadingScreen from "../LoadingScreen";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import Sidebar from "../Sidebar";
+import CanvasWithBoundingBox from "../CanvasWithBoundingBox";
 
 const Detail = ({ label, value }: { label: string, value: string }) => {
     return <div className="product-detail">
@@ -47,7 +49,22 @@ const Product = () => {
     }
 
     if(!image) {
-        return null;
+        image = {
+            url: "",
+            custom_metadata: {
+                alttext: "",
+                combo_menu_flag: "",
+                content_uid: "",
+                nutrition_information: {
+                    energy: "0 g",
+                    protein: "0 g",
+                    fat: "0 g",
+                    sugar: "0 g",
+                    sodium: "0 g",
+                    carbohydrates: "0 g"
+                }
+            }
+        }
     }
 
     const {
@@ -74,13 +91,15 @@ const Product = () => {
     return (
         <div className="menu-page">
             <div className="product-container">
+                <Sidebar url={url}/>
                 <div>
                     <div className="product-image-container">
-                        <img
+                        {/* <img
                             src={url}
                             alt={alttext}
                             className="product-image"
-                        />
+                        /> */}
+                        <CanvasWithBoundingBox img={url}/>
                     </div>
 
                     {entry?.content_type_uid !== "combos" &&relatedEntries && relatedEntries.length > 0 && (

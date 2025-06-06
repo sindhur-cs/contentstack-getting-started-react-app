@@ -1,7 +1,7 @@
 import { Image, TData } from "../../types";
 import Spinner from "../Spinner";
 
-const Detail = ({ label, value }: { label: string, value: string }) => {
+export const Detail = ({ label, value }: { label: string, value: string }) => {
     return <div style={{
         display: "flex",
         flexDirection: "column",

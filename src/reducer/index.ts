@@ -7,6 +7,7 @@ interface AppState {
   homePageData: THomePageData;
   menuPageData: TMenu[];
   beverages: TData[];
+  boundingboxes: any;
 }
 
 const initialState: AppState = {
@@ -161,6 +162,7 @@ const initialState: AppState = {
     },
   ],
   beverages: localStorage.getItem("beverages") ? JSON.parse(localStorage.getItem("beverages") || "[]") : [],
+  boundingboxes: null
 };
 
 const mainSlice = createSlice({
@@ -182,6 +184,9 @@ const mainSlice = createSlice({
     setBeverages: (state, action: PayloadAction<TData[]>) => {
       state.beverages = action.payload;
     },
+    setBoundingBoxes: (state, action: PayloadAction<any>) => {
+      state.boundingboxes = action.payload;
+    }
   },
 });
 
@@ -190,7 +195,8 @@ export const {
   setFooterData,
   setHomePageData,
   setMenuPageData,
-  setBeverages
+  setBeverages,
+  setBoundingBoxes
 } = mainSlice.actions;
 
 export default mainSlice.reducer;

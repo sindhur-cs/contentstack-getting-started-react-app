@@ -11,6 +11,8 @@ import LoadingScreen from "../components/LoadingScreen";
 import { NotFound } from "../components/NotFound";
 import { onEntryChange } from "../sdk/utils";
 import Product from "../components/product/Product";
+import Campaign from "../components/campaign/Campaign";
+import CampaignProduct from "../components/campaign/CampaignProduct";
 
 const AppRoutes: React.FC = () => {
   const dispatch = useDispatch();
@@ -36,6 +38,8 @@ const AppRoutes: React.FC = () => {
                 <Route path="/menu" element={<Menu />} />
                 <Route path="/test" element={<Comp />} />
                 <Route path={`/:product/:id`} element={<Product/>}/>
+                <Route path="/campaign" element={<Campaign />}/>
+                <Route path="/campaign/:id" element={<CampaignProduct />}/>
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
