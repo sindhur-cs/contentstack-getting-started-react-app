@@ -96,9 +96,9 @@ const Sidebar = ({ url }: { url: string }) => {
 
     const tabsInfo = [
         {
-            id: "tags",
-            tabIcon: <Icon icon="Information" />,
-            tabLabel: "Tags",
+            id: "ai",
+            tabIcon: <Icon icon="ContentstackAI" version="v2" height={20} width={20}/>,
+            tabLabel: "AI",
             windowTitle: "AI Generated Information",
             data: (
                 <div className="sidebar-container">
