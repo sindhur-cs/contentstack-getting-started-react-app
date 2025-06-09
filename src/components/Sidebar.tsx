@@ -97,7 +97,7 @@ const Sidebar = ({ url }: { url: string }) => {
     const tabsInfo = [
         {
             id: "ai",
-            tabIcon: <Icon icon="ContentstackAI" version="v2" height={20} width={20}/>,
+            tabIcon: <Icon icon="ContentstackAI" version="v2" height={24} width={24}/>,
             tabLabel: "AI",
             windowTitle: "AI Generated Information",
             data: (
@@ -159,7 +159,7 @@ const Sidebar = ({ url }: { url: string }) => {
         },
         {
             id: "bounding-box",
-            tabIcon: <Icon icon="Image" height={20} width={20}/>,
+            tabIcon: <Icon icon="Image" height={24} width={24} version="v2"/>,
             tabLabel: "Bounding Box",
             windowTitle: "Bounding Box",
             data: (
