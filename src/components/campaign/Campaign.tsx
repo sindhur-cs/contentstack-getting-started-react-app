@@ -16,6 +16,7 @@ const Campaign = () => {
                 const data = await fetchCampaignPageData();
                 setTitle(data.entry.title || "");
                 setSections(data.entry.sections || []);
+                console.log(data.entry.sections);
             }
             catch (error) {
                 setTitle("");

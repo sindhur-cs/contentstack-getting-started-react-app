@@ -13,6 +13,7 @@ const Sidebar = ({ url }: { url: string }) => {
     const [imageDescription, setImageDescription] = useState<string>("");
     const [descLoading, setDescLoading] = useState(false);
     const [tagLoading, setIsTagLoading] = useState(false);
+    const [AIDetectionLoading, setAIDetectionLoading] = useState(false);
 
     const handleEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter") {
@@ -61,6 +62,9 @@ const Sidebar = ({ url }: { url: string }) => {
         }
         catch(error) {
             console.log(error);
+        }
+        finally {
+            setAIDetectionLoading(false);
         }
     }
 
@@ -160,7 +164,10 @@ const Sidebar = ({ url }: { url: string }) => {
             windowTitle: "Bounding Box",
             data: (
                 <div className="bounding-box-container">
-                    <Button onClick={handleBoundingBoxCreation}>Detect</Button>
+                    <Button onClick={() => {
+                        setAIDetectionLoading(true);
+                        handleBoundingBoxCreation()
+                    }}>{AIDetectionLoading ? <Spinner size={20} className="spinner-white"/> : "Detect"}</Button>
                     <Button onClick={() => dispatch(setBoundingBoxes(null))}>Clear</Button>
                 </div>
             )

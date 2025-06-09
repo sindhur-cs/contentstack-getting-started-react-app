@@ -60,7 +60,6 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
                 {
                     boundingBoxes && boundingBoxes.objects.length > 0 && boundingBoxes.objects.map((box: any, index: number) => {
                         const scaledBox = scaleCoordinates(box.bounding_box);
-                        console.log(JSON.stringify(scaledBox));
                         // const scaledBox = box.bounding_box;
                         return (
                             <>

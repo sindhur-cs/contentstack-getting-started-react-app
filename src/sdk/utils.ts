@@ -114,22 +114,20 @@ export const initializeContentstackSdk = () => {
   );
   // Stack.setHost("https://gcp-eu-cdn.contentstack.com");
 
-  // Only initialize live preview if not in production
-  if (process.env.REACT_APP_PURGE_PREVIEW_SDK !== 'true') {
-    ContentstackLivePreview.init({
-      stackDetails: {
-        apiKey: REACT_APP_CONTENTSTACK_API_KEY,
-        environment: REACT_APP_CONTENTSTACK_ENVIRONMENT,
-      },
-      mode: "builder",
-      editButton: {
-        enable: true,
-        exclude: ["outsideLivePreviewPortal"],
-        includeByQueryParameter: true,
-        position: "bottom",
-      },
-    });
-  }
+  ContentstackLivePreview.init({
+    stackDetails: {
+      apiKey: REACT_APP_CONTENTSTACK_API_KEY,
+      environment: REACT_APP_CONTENTSTACK_ENVIRONMENT,
+    },
+
+    mode: "builder",
+    editButton: {
+      enable: true,
+      exclude: ["outsideLivePreviewPortal"],
+      includeByQueryParameter: true,
+      position: "bottom",
+    },
+  });
 
   return Stack;
 };

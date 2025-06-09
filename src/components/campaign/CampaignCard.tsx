@@ -11,6 +11,8 @@ const CampaignCard = ({ description, image, title, id, healthBenefits }: { descr
 
     let currImage: any = image;
 
+    console.log(image);
+
     if (!image) {
         currImage = {
             url: "",
@@ -53,8 +55,9 @@ const CampaignCard = ({ description, image, title, id, healthBenefits }: { descr
                         // src={"/pineapple.png"}
                         alt="Campaign"
                         className="image"
+                        onLoad={() => console.log('Image loaded')}
+                        onError={(e) => console.log(e, "Image Failed")}
                     />
-
 
                     {/* info icon */}
                     <div
