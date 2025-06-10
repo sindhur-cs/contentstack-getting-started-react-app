@@ -13,6 +13,8 @@ import { onEntryChange } from "../sdk/utils";
 import Product from "../components/product/Product";
 import Campaign from "../components/campaign/Campaign";
 import CampaignProduct from "../components/campaign/CampaignProduct";
+import Volvo from "../components/volvo/Volvo";
+import VolvoProduct from "../components/volvo/VolvoProduct";
 
 const AppRoutes: React.FC = () => {
   const dispatch = useDispatch();
@@ -40,6 +42,8 @@ const AppRoutes: React.FC = () => {
                 <Route path={`/:product/:id`} element={<Product/>}/>
                 <Route path="/campaign" element={<Campaign />}/>
                 <Route path="/campaign/:id" element={<CampaignProduct />}/>
+                <Route path="/volvo" element={<Volvo/>} />
+                <Route path="/volvo/:id" element={<VolvoProduct/>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>

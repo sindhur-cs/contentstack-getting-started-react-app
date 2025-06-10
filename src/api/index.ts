@@ -303,3 +303,21 @@ export const fetchCMAMenuPageData = async (
   dispatch(setBeverages(beverages));
   setLoading(false);
 };
+
+export const fetchVolvoPageData = async () => {
+  try {
+    const data = await fetch(process.env.REACT_APP_CAMPAIGN_CDN_API || "", {
+      method: "GET",
+      headers: {
+        api_key: process.env.REACT_APP_CONTENTSTACK_API_KEY || "",
+        access_token: process.env.REACT_APP_CONTENTSTACK_DELIVERY_TOKEN || "",
+        "Content-Type": "application/json"
+      }
+    });
+    const result = await data.json();
+    return result;
+  }
+  catch(error) {
+    console.log(error);
+  }
+}
