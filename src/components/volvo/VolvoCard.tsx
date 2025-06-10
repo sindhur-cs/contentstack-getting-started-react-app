@@ -1,11 +1,9 @@
 import { useNavigate } from 'react-router';
 import './CampaignCard.css';
 import { useEffect, useState } from 'react';
-import { Detail } from '../menu/ImageComponent';
 
-const VolvoCard = ({ description, image, title, id, healthBenefits, version }: { description: string, image: any, title: string, id: string, healthBenefits?: any, version?: string }) => {
+const VolvoCard = ({ description, image, title, id, version }: { description: string, image: any, title: string, id: string, version?: string }) => {
     const navigate = useNavigate();
-    const [isOpen, setIsOpen] = useState(false);
     const [isAlt, setIsAlt] = useState(false);
     const [alttext, setAltText] = useState("");
 
@@ -59,45 +57,6 @@ const VolvoCard = ({ description, image, title, id, healthBenefits, version }: {
                         onError={(e) => console.log(e, "Image Failed")}
                     />
 
-                    {/* info icon */}
-                    <div
-                        className="info-icon"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setIsOpen(!isOpen);
-                        }}
-                    >
-                        {!isOpen ? <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="16" x2="12" y2="12"></line>
-                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                        </svg>
-                            :
-                            <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        }
-                    </div>
-
                     {/* hover alt text icon */}
                     <div
                         className="alt-text-icon"
@@ -125,25 +84,6 @@ const VolvoCard = ({ description, image, title, id, healthBenefits, version }: {
                     {isAlt && <div className="alt-text">
                         {alttext || "No description available"}
                     </div>}
-
-                    {/* product details */}
-                    {isOpen && (
-                        <div
-                            className="menu-product-details"
-                        >
-                            <div style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "14px",
-                            }}>
-                                <Detail label="Fiber:" value={healthBenefits.fiber || "Default"} />
-                                <Detail label="Anti-oxidants:" value={healthBenefits.anti_oxidants_property || "Default"} />
-                                <Detail label="Electrolytes:" value={healthBenefits.electrolytes_property || "Default"} />
-                                <Detail label="Vitamins:" value={healthBenefits.vitamins_property || "Default"} />
-                                <Detail label="Calories:" value={healthBenefits.calories_property || "Default"} />
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
             <div className="content">

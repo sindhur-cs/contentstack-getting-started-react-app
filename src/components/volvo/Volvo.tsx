@@ -3,6 +3,7 @@ import { fetchVolvoPageData } from "../../api";
 import CampaignCard from "./VolvoCard";
 import './CampaignCard.css';
 import LoadingScreen from "../LoadingScreen";
+import VolvoCard from "./VolvoCard";
 
 const Volvo = () => {
     const [sections, setSections] = useState([]);
@@ -41,7 +42,7 @@ const Volvo = () => {
             {title && <h1 className="campaignTitle">{title}</h1>}
             {
                 sections.map((section: any, index: number) => (
-                    <CampaignCard
+                    <VolvoCard
                         key={index}
                         description={section.description}
                         image={section.image}
