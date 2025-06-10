@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import './CampaignCard.css';
 import { useEffect, useState } from 'react';
 
-const VolvoCard = ({ description, image, title, id, version }: { description: string, image: any, title: string, id: string, version?: string }) => {
+const VolvoCard = ({ description, image, title, id }: { description: string, image: any, title: string, id: string }) => {
     const navigate = useNavigate();
     const [isAlt, setIsAlt] = useState(false);
     const [alttext, setAltText] = useState("");
@@ -45,7 +45,7 @@ const VolvoCard = ({ description, image, title, id, version }: { description: st
     }, []);
 
     return (
-        <div className="card" onClick={() => navigate(version === "volvo" ? `/volvo/${id}` : `/campaign/${id}`)}>
+        <div className="card" onClick={() => navigate(`/volvo/${id}`)}>
             <div className="imageContainer">
                 <div style={{ position: "relative" }}>
                     <img

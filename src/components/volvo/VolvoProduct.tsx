@@ -3,14 +3,7 @@ import { useEffect, useState } from "react";
 import LoadingScreen from "../LoadingScreen";
 import Sidebar from "../Sidebar";
 import CanvasWithBoundingBox from "../CanvasWithBoundingBox";
-import { fetchCampaignPageData, fetchVolvoPageData } from "../../api";
-
-const Detail = ({ label, value }: { label: string, value: string }) => {
-    return <div className="product-detail">
-        <span style={{ color: "#a0a0a0", fontSize: "14px" }}>{label}</span>
-        <span style={{ fontWeight: "600", fontSize: "16px" }}>{value}</span>
-    </div>
-}
+import { fetchVolvoPageData } from "../../api";
 
 const VolvoProduct = () => {
     const { id } = useParams(); 

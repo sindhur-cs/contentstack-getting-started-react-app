@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { fetchVolvoPageData } from "../../api";
-import CampaignCard from "./VolvoCard";
 import './CampaignCard.css';
 import LoadingScreen from "../LoadingScreen";
 import VolvoCard from "./VolvoCard";
@@ -48,7 +47,6 @@ const Volvo = () => {
                         image={section.image}
                         title={section.image_title}
                         id={section._metadata.uid}
-                        version={"volvo"}
                     />
                 ))
 

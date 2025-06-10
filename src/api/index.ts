@@ -314,7 +314,9 @@ export const fetchVolvoPageData = async () => {
         "Content-Type": "application/json"
       }
     });
+    console.log(data);
     const result = await data.json();
+    console.log(result);
     return result;
   }
   catch(error) {
