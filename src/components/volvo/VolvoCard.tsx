@@ -46,7 +46,7 @@ const VolvoCard = ({ description, image, title, id }: { description: string, ima
             <div className="imageContainer">
                 <div style={{ position: "relative" }}>
                     <img
-                        src={currImage.url}
+                        src={`${currImage.url}?environment=${process.env.REACT_APP_CONTENTSTACK_ENVIRONMENT}`}
                         // src={"/pineapple.png"}
                         alt="Campaign"
                         className="image"
