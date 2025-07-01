@@ -102,3 +102,21 @@
   font-weight: 900;
   font-family: "Cormorant Garamond";
 }
+
+.product-sidebar-container {
+  width: fit-content;
+  
+  .SidebarWindow__tabs-container {
+    padding-top: 70px !important;
+    min-height: 92% !important;
+  }
+
+  #resizable__panel {
+    padding-top: 70px !important;
+  }
+}
+
+#campaign-product-container {
+  margin-top: 0 !important;
+  padding-left: 48px !important;
+}

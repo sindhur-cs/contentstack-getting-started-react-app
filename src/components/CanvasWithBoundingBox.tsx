@@ -19,62 +19,20 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
         
         const originalWidth = image.width;
         const originalHeight = image.height;
-        const canvasWidth = 500;
-        const canvasHeight = 500;
-
-        // actual image dimensions
-        const displayedWidth = convertImageWidth(image.width);
-        const displayedHeight = convertImageHeight(image.height);
-        
-        // image offset adjustment to center the image
-        const imageOffsetX = (canvasWidth - displayedWidth) / 2;
-        const imageOffsetY = (canvasHeight - displayedHeight) / 2;
+        const canvasWidth = 700;
+        const canvasHeight = 400;
 
         // scale factors
-        const scaleX = displayedWidth / originalWidth;
-        const scaleY = displayedHeight / originalHeight;
+        const scaleX = canvasWidth / originalWidth;
+        const scaleY = canvasHeight / originalHeight;
 
         return {
-            x: (box.x * scaleX) + imageOffsetX,
-            y: (box.y * scaleY) + imageOffsetY,
+            x: box.x * scaleX,
+            y: box.y * scaleY,
             width: box.width * scaleX,
             height: box.height * scaleY
         };
     };
-
-    const convertImageWidth = (width: number | undefined) => {
-        if (!width || !image) return 0;
-        
-        const canvasWidth = 500;
-        const canvasHeight = 500;
-        const imageAspectRatio = image.width / image.height;
-        const canvasAspectRatio = canvasWidth / canvasHeight;
-        
-        if (imageAspectRatio > canvasAspectRatio) {
-            // Image is wider than canvas - width becomes 500
-            return canvasWidth;
-        } else {
-            // Image is taller than canvas - height becomes 500
-            return canvasHeight * imageAspectRatio;
-        }
-    }
-
-    const convertImageHeight = (height: number | undefined) => {
-        if (!height || !image) return 0;
-        
-        const canvasWidth = 500;
-        const canvasHeight = 500;
-        const imageAspectRatio = image.width / image.height;
-        const canvasAspectRatio = canvasWidth / canvasHeight;
-        
-        if (imageAspectRatio > canvasAspectRatio) {
-            // Image is wider than canvas - width becomes 500
-            return canvasWidth / imageAspectRatio;
-        } else {
-            // Image is taller than canvas - height becomes 500
-            return canvasHeight;
-        }
-    }
 
     // Function to check if two bounding boxes overlap significantly
     const doBoxesOverlap = (box1: any, box2: any, threshold: number = 0.5) => {
@@ -121,14 +79,14 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
     }, [image]);
 
     return (
-        <Stage width={500} height={500}>
+        <Stage width={700} height={400}>
             <Layer>
                 <Image
                     image={image}
-                    x={(500 - convertImageWidth(image?.width)) / 2}
-                    y={(500 - convertImageHeight(image?.height)) / 2}
-                    width={convertImageWidth(image?.width)}
-                    height={convertImageHeight(image?.height)}
+                    x={0}
+                    y={0}
+                    width={700}
+                    height={400}
                     ref={imageRef}
                 />
                 {

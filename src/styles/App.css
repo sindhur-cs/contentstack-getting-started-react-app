@@ -537,7 +537,7 @@
 
   .product-container {
     display: flex;
-    gap: 80px;
+    gap: 60px;
     padding: 48px 96px;
     width: 100%;
     align-items: flex-start;

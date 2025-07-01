@@ -83,8 +83,10 @@ const CampaignProduct = () => {
 
     return (
         <div className="menu-page">
-            <div className="product-container">
+            <div className="product-sidebar-container">
                 <Sidebar url={url}/>
+            </div>
+            <div className="product-container" id="campaign-product-container">
                     <div className="product-image-container">
                         {/* <CanvasWithBoundingBox img={"https://dev9-dam-api.csnonprod.com/api/spaces/am7972de584c4e0397/assets/am7e18362214a6803c/f32c2d2fe77c6ba1a5bd354c/banana.png"}/> */}
                         {/* <CanvasWithBoundingBox img={"/pineapple.png"}/> */}

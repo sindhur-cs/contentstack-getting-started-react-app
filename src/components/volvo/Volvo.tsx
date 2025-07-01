@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { fetchVolvoPageData } from "../../api";
-import './CampaignCard.css';
+import './Volvo.css';
 import LoadingScreen from "../LoadingScreen";
 import VolvoCard from "./VolvoCard";
 

@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router';
-import './CampaignCard.css';
 import { useEffect, useState } from 'react';
 
 const VolvoCard = ({ description, image, title, id }: { description: string, image: any, title: string, id: string }) => {
