@@ -14,10 +14,8 @@ const Volvo = () => {
         const displaySections = async () => {
             try {
                 const data = await fetchVolvoPageData();
-                console.log(data);
                 setTitle(data.entry.title || "");
                 setSections(data.entry.volvo_images || []);
-                console.log(data.entry.volvo_images);
             }
             catch (error) {
                 setTitle("");

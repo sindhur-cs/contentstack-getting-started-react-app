@@ -14,9 +14,7 @@ const VolvoProduct = () => {
         const displaySections = async () => {
             try {
                 const data = await fetchVolvoPageData();
-                console.log(data.entry.volvo_images);
                 setSection(data.entry.volvo_images.find((section: any) => section._metadata.uid === id) || null);
-                console.log(data.entry.volvo_images.find((section: any) => section._metadata.uid === id));
             }
             catch (error) {
                 setSection(null);

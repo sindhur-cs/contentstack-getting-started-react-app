@@ -22,15 +22,89 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
         const canvasWidth = 500;
         const canvasHeight = 500;
 
-        const scaleX = canvasWidth / originalWidth;
-        const scaleY = canvasHeight / originalHeight;
+        // actual image dimensions
+        const displayedWidth = convertImageWidth(image.width);
+        const displayedHeight = convertImageHeight(image.height);
+        
+        // image offset adjustment to center the image
+        const imageOffsetX = (canvasWidth - displayedWidth) / 2;
+        const imageOffsetY = (canvasHeight - displayedHeight) / 2;
+
+        // scale factors
+        const scaleX = displayedWidth / originalWidth;
+        const scaleY = displayedHeight / originalHeight;
 
         return {
-            x: box.x * scaleX,
-            y: box.y * scaleY,
+            x: (box.x * scaleX) + imageOffsetX,
+            y: (box.y * scaleY) + imageOffsetY,
             width: box.width * scaleX,
             height: box.height * scaleY
         };
+    };
+
+    const convertImageWidth = (width: number | undefined) => {
+        if (!width || !image) return 0;
+        
+        const canvasWidth = 500;
+        const canvasHeight = 500;
+        const imageAspectRatio = image.width / image.height;
+        const canvasAspectRatio = canvasWidth / canvasHeight;
+        
+        if (imageAspectRatio > canvasAspectRatio) {
+            // Image is wider than canvas - width becomes 500
+            return canvasWidth;
+        } else {
+            // Image is taller than canvas - height becomes 500
+            return canvasHeight * imageAspectRatio;
+        }
+    }
+
+    const convertImageHeight = (height: number | undefined) => {
+        if (!height || !image) return 0;
+        
+        const canvasWidth = 500;
+        const canvasHeight = 500;
+        const imageAspectRatio = image.width / image.height;
+        const canvasAspectRatio = canvasWidth / canvasHeight;
+        
+        if (imageAspectRatio > canvasAspectRatio) {
+            // Image is wider than canvas - width becomes 500
+            return canvasWidth / imageAspectRatio;
+        } else {
+            // Image is taller than canvas - height becomes 500
+            return canvasHeight;
+        }
+    }
+
+    // Function to check if two bounding boxes overlap significantly
+    const doBoxesOverlap = (box1: any, box2: any, threshold: number = 0.5) => {
+        const x1 = Math.max(box1.x, box2.x);
+        const y1 = Math.max(box1.y, box2.y);
+        const x2 = Math.min(box1.x + box1.width, box2.x + box2.width);
+        const y2 = Math.min(box1.y + box1.height, box2.y + box2.height);
+
+        if (x1 < x2 && y1 < y2) {
+            const intersectionArea = (x2 - x1) * (y2 - y1);
+            const box1Area = box1.width * box1.height;
+            const box2Area = box2.width * box2.height;
+            const overlapRatio = intersectionArea / Math.min(box1Area, box2Area);
+            
+            return overlapRatio > threshold;
+        }
+        return false;
+    };
+
+    // Filter faces that don't overlap with celebrities
+    const getFilteredFaces = () => {
+        if (!boundingBoxes || !boundingBoxes.faces || !boundingBoxes.celebrities) {
+            return boundingBoxes?.faces || [];
+        }
+
+        return boundingBoxes.faces.filter((face: any) => {
+            return !boundingBoxes.celebrities.some((celebrity: any) => 
+                doBoxesOverlap(face.bounding_box, celebrity.bounding_box)
+            );
+        });
     };
 
     useEffect(() => {
@@ -51,10 +125,10 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
             <Layer>
                 <Image
                     image={image}
-                    x={0}
-                    y={0}
-                    width={500}
-                    height={500}
+                    x={(500 - convertImageWidth(image?.width)) / 2}
+                    y={(500 - convertImageHeight(image?.height)) / 2}
+                    width={convertImageWidth(image?.width)}
+                    height={convertImageHeight(image?.height)}
                     ref={imageRef}
                 />
                 {
@@ -83,7 +157,7 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
                                 />
                                 <Html groupProps={{ x: scaledBox.x + scaledBox.width - 20, y: scaledBox.y + scaledBox.height - 20 }}>
                                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 20, height: 20, marginTop: 1.5 }}>
-                                        <Icon icon="ContentModel" height={15} width={15} version='v2' stroke='black' withTooltip={true} tooltipContent={`Object #${index + 1}`} tooltipPosition='right'/>
+                                        <Icon icon="ContentModel" height={15} width={15} version='v2' stroke='black' withTooltip={true} tooltipContent={box.name} tooltipPosition='right'/>
                                     </div>
                                 </Html>
                             </>
@@ -91,7 +165,7 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
                     })
                 }
                 {
-                    boundingBoxes && boundingBoxes.faces.length > 0 && boundingBoxes.faces.map((box: any, index: number) => {
+                    boundingBoxes && getFilteredFaces().length > 0 && getFilteredFaces().map((box: any, index: number) => {
                         const scaledBox = scaleCoordinates(box.bounding_box);
                         // const scaledBox = box.bounding_box;
                         return (
@@ -149,7 +223,7 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
                                 />
                                 <Html groupProps={{ x: scaledBox.x + scaledBox.width - 20, y: scaledBox.y + scaledBox.height - 20 }}>
                                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 20, height: 20,  marginTop: 1.5 }}>
-                                        <Icon icon="Star" stroke="black" height={15} width={15} withTooltip={true} tooltipContent={`Star #${index + 1}`} version="v2" tooltipPosition='right'/>
+                                        <Icon icon="Star" stroke="black" height={15} width={15} withTooltip={true} tooltipContent={box.name} version="v2" tooltipPosition='right'/>
                                     </div>
                                 </Html>
                             </>

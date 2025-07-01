@@ -9,8 +9,6 @@ const VolvoCard = ({ description, image, title, id }: { description: string, ima
 
     let currImage: any = image;
 
-    console.log(image);
-
     if (!image) {
         currImage = {
             url: "",
