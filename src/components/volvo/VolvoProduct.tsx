@@ -44,13 +44,13 @@ const VolvoProduct = () => {
 
     return (
         <div className="menu-page product-page">
-            <Sidebar url={section.image.url} />
             <div className="product-container">
-                    <div className="product-image-container">
-                        {/* <CanvasWithBoundingBox img={"https://dev9-dam-api.csnonprod.com/api/spaces/am7972de584c4e0397/assets/am7e18362214a6803c/f32c2d2fe77c6ba1a5bd354c/banana.png"}/> */}
-                        {/* <CanvasWithBoundingBox img={"/pineapple.png"}/> */}
-                        <CanvasWithBoundingBox img={`${section.image.url}?environment=${process.env.REACT_APP_CONTENTSTACK_ENVIRONMENT}`}/>
-                    </div>
+            <Sidebar url={section.image.url} />
+                <div className="product-image-container">
+                    {/* <CanvasWithBoundingBox img={"https://dev9-dam-api.csnonprod.com/api/spaces/am7972de584c4e0397/assets/am7e18362214a6803c/f32c2d2fe77c6ba1a5bd354c/banana.png"}/> */}
+                    {/* <CanvasWithBoundingBox img={"/pineapple.png"}/> */}
+                    <CanvasWithBoundingBox img={`${section.image.url}?environment=${process.env.REACT_APP_CONTENTSTACK_ENVIRONMENT}`} />
+                </div>
 
                 <div className="product-details-container">
                     <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
