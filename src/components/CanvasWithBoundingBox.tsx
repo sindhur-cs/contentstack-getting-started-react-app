@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Stage, Layer, Rect, Image, Text } from 'react-konva';
 import { useDispatch, useSelector } from 'react-redux';
 import useImage from 'use-image';
@@ -6,12 +6,50 @@ import { RootState } from '../store';
 import { setBoundingBoxes } from '../reducer';
 import { Html } from 'react-konva-utils';
 import { Icon } from '@contentstack/venus-components';
+import LoadingScreen from './LoadingScreen';
 
 const CanvasWithBoundingBox = ({ img }: { img: string }) => {
     const boundingBoxes = useSelector((state: RootState) => state.main.boundingboxes);
     const dispatch = useDispatch();
     const [image] = useImage(img, 'anonymous');
     const imageRef = useRef(null);
+    const [canvasDimensions, setCanvasDimensions] = useState({ width: 0, height: 0 });
+    const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0, offsetX: 0, offsetY: 0 });
+    const [dimensionsCalculated, setDimensionsCalculated] = useState(false);
+
+    // Calculate dimensions maintaining aspect ratio
+    useEffect(() => {
+        if (image && image.width && image.height) {
+            const minWidth = 700;
+            const minHeight = 400;
+            const imageAspectRatio = image.width / image.height;
+            const minAspectRatio = minWidth / minHeight;
+
+            let canvasWidth, canvasHeight;
+            let imageWidth, imageHeight;
+            let offsetX = 0, offsetY = 0;
+
+            if (imageAspectRatio > minAspectRatio) {
+                // Image is wider than min ratio - fit to height (ensure min height is met)
+                canvasHeight = minHeight;
+                canvasWidth = minHeight * imageAspectRatio;
+                imageHeight = minHeight;
+                imageWidth = minHeight * imageAspectRatio;
+            } else {
+                // Image is taller than min ratio - fit to width (ensure min width is met)
+                canvasWidth = minWidth;
+                canvasHeight = minWidth / imageAspectRatio;
+                imageWidth = minWidth;
+                imageHeight = minWidth / imageAspectRatio;
+            }
+
+            setCanvasDimensions({ width: canvasWidth, height: canvasHeight });
+            setImageDimensions({ width: imageWidth, height: imageHeight, offsetX, offsetY });
+            setDimensionsCalculated(true);
+        } else {
+            setDimensionsCalculated(false);
+        }
+    }, [image, img]);
 
     // original image dimensions to canvas - > current image (x or y or width or height) * scale 
     const scaleCoordinates = (box: any) => {
@@ -19,16 +57,14 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
         
         const originalWidth = image.width;
         const originalHeight = image.height;
-        const canvasWidth = 700;
-        const canvasHeight = 400;
 
-        // scale factors
-        const scaleX = canvasWidth / originalWidth;
-        const scaleY = canvasHeight / originalHeight;
+        // scale factors based on actual displayed image size
+        const scaleX = imageDimensions.width / originalWidth;
+        const scaleY = imageDimensions.height / originalHeight;
 
         return {
-            x: box.x * scaleX,
-            y: box.y * scaleY,
+            x: (box.x * scaleX) + imageDimensions.offsetX,
+            y: (box.y * scaleY) + imageDimensions.offsetY,
             width: box.width * scaleX,
             height: box.height * scaleY
         };
@@ -78,15 +114,19 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
         }
     }, [image]);
 
+    if (!dimensionsCalculated || !image || canvasDimensions.width === 0 || canvasDimensions.height === 0) {
+        return <LoadingScreen />;
+    }
+
     return (
-        <Stage width={700} height={400}>
+        <Stage width={canvasDimensions.width} height={canvasDimensions.height}>
             <Layer>
                 <Image
                     image={image}
-                    x={0}
-                    y={0}
-                    width={700}
-                    height={400}
+                    x={imageDimensions.offsetX}
+                    y={imageDimensions.offsetY}
+                    width={imageDimensions.width}
+                    height={imageDimensions.height}
                     ref={imageRef}
                 />
                 {
