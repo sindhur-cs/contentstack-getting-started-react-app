@@ -107,16 +107,21 @@
   margin-bottom: 0 !important;
   flex-direction: row !important;
   gap: 0 !important;
-}
-  
-  .SidebarWindow__tabs-container {
-    padding-top: 70px !important;
-    height: 92% !important;
-  }
+  height: 100vh !important;
 
-  #resizable__panel {
-    padding-top: 70px !important;
+  .SidebarWindow {
+    height: 100vh !important;
   }
+}
+
+.SidebarWindow__tabs-container {
+  margin-top: 70px !important;
+  height: 92% !important;
+}
+
+#resizable__panel {
+  padding-top: 70px !important;
+}
 
 .product-container {
   width: 100%;
