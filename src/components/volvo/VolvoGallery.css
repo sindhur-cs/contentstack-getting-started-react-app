@@ -1,0 +1,605 @@
+.gallery-page {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 70px; /* Account for fixed header */
+}
+
+.gallery-header {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.gallery-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #241d32;
+  margin-bottom: 1rem;
+  font-family: Inter, sans-serif;
+}
+
+.gallery-header p {
+  font-size: 1.2rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto 1.5rem auto;
+  font-family: Inter, sans-serif;
+}
+
+.hotspot-toggle-btn {
+  background: #3822aa;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: Inter, sans-serif;
+  box-shadow: 0 4px 15px rgba(56, 34, 170, 0.3);
+}
+
+.hotspot-toggle-btn:hover {
+  background: #2d1a85;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 34, 170, 0.4);
+}
+
+.hotspot-toggle-btn.active {
+  background: #3822aa;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.hotspot-toggle-btn.active:hover {
+  background: #218838;
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.gallery-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.gallery-item {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.gallery-image-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+/* 360 View Button */
+.view-360-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #00ffff;
+  border: 2px solid #00ffff;
+  border-radius: 25px;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-family: Inter, sans-serif;
+  z-index: 15;
+}
+
+.view-360-btn:hover {
+  background: rgba(0, 255, 255, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.view-360-btn svg {
+  animation: rotate360 3s linear infinite;
+}
+
+@keyframes rotate360 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.gallery-image {
+  width: 100%;
+  height: auto;
+  min-height: 60vh;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover .gallery-image {
+  transform: scale(1.02);
+}
+
+.gallery-item-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    transparent 100%
+  );
+  color: white;
+  padding: 2rem;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover .gallery-item-overlay {
+  transform: translateY(0);
+}
+
+.gallery-item-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-family: Inter, sans-serif;
+}
+
+.gallery-item-description {
+  font-size: 1rem;
+  line-height: 1.5;
+  opacity: 0.9;
+  font-family: Inter, sans-serif;
+}
+
+.gallery-error,
+.gallery-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.gallery-error h2,
+.gallery-empty h2 {
+  font-size: 2rem;
+  color: #241d32;
+  margin-bottom: 1rem;
+  font-family: Inter, sans-serif;
+}
+
+.gallery-error p,
+.gallery-empty p {
+  font-size: 1.1rem;
+  color: #666;
+  font-family: Inter, sans-serif;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .gallery-header h1 {
+    font-size: 2rem;
+  }
+  
+  .gallery-header p {
+    font-size: 1rem;
+  }
+  
+  .gallery-image {
+    min-height: 40vh;
+  }
+  
+  .gallery-item-overlay {
+    padding: 1rem;
+  }
+  
+  .gallery-item-title {
+    font-size: 1.2rem;
+  }
+  
+  .gallery-item-description {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-header {
+    padding: 1rem;
+  }
+  
+  .gallery-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .gallery-image {
+    min-height: 30vh;
+  }
+}
+
+/* Hotspots Styles */
+.hotspots-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hotspot {
+  position: absolute;
+  cursor: pointer;
+  pointer-events: all;
+  z-index: 10;
+}
+
+.hotspot-dot {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 2px solid #3822aa;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.hotspot-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: rgba(56, 34, 170, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 2s infinite;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+.hotspot:hover .hotspot-dot {
+  background: #3822aa;
+  border-color: white;
+  transform: scale(1.2);
+  transition: all 0.3s ease;
+}
+
+.hotspot:hover .hotspot-pulse {
+  animation-duration: 1s;
+  background: rgba(56, 34, 170, 0.5);
+}
+
+/* Hotspot Info Tooltip */
+.hotspot-info {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.95);
+  color: white;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  animation: fadeInScale 0.3s ease-out;
+  transform: translate(20px, -50%);
+  min-width: 250px;
+  max-width: 300px;
+  border: 2px solid #00ffff;
+}
+
+.hotspot-info::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 8px solid transparent;
+  border-right-color: #00ffff;
+}
+
+/* Handle tooltips near the right edge */
+.hotspot-info[style*="left: 7"], 
+.hotspot-info[style*="left: 8"],
+.hotspot-info[style*="left: 9"] {
+  transform: translate(-320px, -50%);
+}
+
+.hotspot-info[style*="left: 7"]::before,
+.hotspot-info[style*="left: 8"]::before, 
+.hotspot-info[style*="left: 9"]::before {
+  left: calc(100% + 0px);
+  border-right-color: transparent;
+  border-left-color: #00ffff;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: translate(20px, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(20px, -50%) scale(1);
+  }
+}
+
+.hotspot-info-close {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #00ffff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.hotspot-info-close:hover {
+  background: rgba(0, 255, 255, 0.2);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.hotspot-info-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #00ffff;
+  font-family: Inter, sans-serif;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.hotspot-info-description {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+  font-family: Inter, sans-serif;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Mobile adjustments for hotspots */
+@media (max-width: 768px) {
+  .hotspot-toggle-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .hotspot-dot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .hotspot-pulse {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .hotspot-info {
+    transform: translate(10px, -50%);
+    min-width: 200px;
+    max-width: 250px;
+    padding: 0.75rem 1rem;
+  }
+  
+  .hotspot-info-title {
+    font-size: 1rem;
+  }
+  
+  .hotspot-info-description {
+    font-size: 0.85rem;
+  }
+  
+  .view-360-btn {
+    top: 10px;
+    right: 10px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* 360 View Modal Styles */
+.view-360-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.view-360-content {
+  background: rgba(20, 20, 20, 0.95);
+  border-radius: 15px;
+  padding: 2rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  position: relative;
+  border: 2px solid #00ffff;
+  box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+}
+
+.view-360-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: #00ffff;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.view-360-close:hover {
+  background: rgba(0, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.view-360-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.view-360-header h3 {
+  color: #00ffff;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  font-family: Inter, sans-serif;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.view-360-header p {
+  color: #ffffff;
+  margin: 0;
+  font-family: Inter, sans-serif;
+  opacity: 0.8;
+}
+
+.view-360-image-container {
+  position: relative;
+  text-align: center;
+  margin-bottom: 1rem;
+  cursor: grab;
+}
+
+.view-360-image-container:active {
+  cursor: grabbing;
+}
+
+.view-360-image {
+  max-width: 600px;
+  max-height: 400px;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  user-select: none;
+}
+
+.view-360-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 25px;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.view-360-control-btn {
+  background: #00ffff;
+  color: #000;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: Inter, sans-serif;
+}
+
+.view-360-control-btn:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+}
+
+.view-360-frame-counter {
+  color: #00ffff;
+  font-weight: 600;
+  font-family: Inter, sans-serif;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 255, 255, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.view-360-instructions {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.view-360-instructions p {
+  color: #ffffff;
+  margin: 0;
+  font-family: Inter, sans-serif;
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+/* Mobile adjustments for 360 view */
+@media (max-width: 768px) {
+  .view-360-content {
+    padding: 1rem;
+    margin: 1rem;
+  }
+  
+  .view-360-header h3 {
+    font-size: 1.4rem;
+  }
+  
+  .view-360-image {
+    max-width: 100%;
+    max-height: 300px;
+  }
+  
+  .view-360-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .view-360-control-btn {
+    width: 100%;
+    padding: 0.75rem;
+  }
+} 

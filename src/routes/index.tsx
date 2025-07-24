@@ -15,6 +15,7 @@ import Campaign from "../components/campaign/Campaign";
 import CampaignProduct from "../components/campaign/CampaignProduct";
 import Volvo from "../components/volvo/Volvo";
 import VolvoProduct from "../components/volvo/VolvoProduct";
+import VolvoGallery from "../components/volvo/VolvoGallery";
 
 const AppRoutes: React.FC = () => {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const AppRoutes: React.FC = () => {
                 <Route path="/campaign/:id" element={<CampaignProduct />}/>
                 <Route path="/volvo" element={<Volvo/>} />
                 <Route path="/volvo/:id" element={<VolvoProduct/>} />
+                <Route path="/gallery" element={<VolvoGallery/>} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
