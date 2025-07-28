@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import LoadingScreen from "../LoadingScreen";
-import { fetchVolvoPageData } from "../../api";
+import { fetchVolvoGalleryPageData, fetchVolvoPageData } from "../../api";
 import "./VolvoGallery.css";
 
 interface VisualMarkup {
@@ -24,31 +24,41 @@ interface GalleryImage {
 
 const VolvoGallery = () => {
     const [images, setImages] = useState<GalleryImage[]>([]);
+    const [spinsetImages, setSpinsetImages] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [hotspotsVisible, setHotspotsVisible] = useState(true);
     const [selectedHotspot, setSelectedHotspot] = useState<{hotspot: VisualMarkup, imageIndex: number} | null>(null);
     const [show360View, setShow360View] = useState(false);
     const [currentFrame, setCurrentFrame] = useState(1);
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragStartX, setDragStartX] = useState(0);
+    const [activeTab, setActiveTab] = useState('exterior');
     
-    // Generate 360 view images from volvo-car1.jpg to volvo-car2.jpg (assuming 36 frames for smooth rotation)
-    const total360Frames = 36;
+    // Use the 12 spinset images for 360-degree rotation
+    const total360Frames = 80;
     const get360ImageUrl = (frame: number) => {
-        // For demo purposes, we'll cycle between volvo-car1.jpg and volvo-car2.jpg
-        // In real scenario, you'd have volvo-car1.jpg, volvo-car2.jpg, volvo-car3.jpg, etc.
-        const imageNumber = frame <= 10 ? 11 : 19;
-        //return `${process.env.REACT_APP_CONTENTSTACK_ENVIRONMENT || ''}/volvo-car${imageNumber}.jpg`;
-        return `https://www.divi-pixel.com/wp-content/uploads/2023/06/tesla-${frame}a.jpg`;
-        
+        if (spinsetImages.length === 0) {
+            return '';
+        }
+        // Ensure frame is within bounds (1-12)
+        const frameIndex = ((frame - 1) % spinsetImages.length);
+        return spinsetImages[frameIndex];
     };
 
     useEffect(() => {
         const loadGalleryImages = async () => {
             try {
-                const data = await fetchVolvoPageData();
+                const data = await fetchVolvoGalleryPageData();
                 
-                if (data?.entry?.volvo_gallery?.volvo_image) {
-                    const galleryImages = data.entry.volvo_gallery.volvo_image.map((imageData: any, index: number) => {
+                // Extract spinset images for 360-degree view
+                if (data?.entry?.spinset?.spinsetimages) {
+                    const spinsetUrls = data.entry.spinset.spinsetimages.map((image: any) => image.url);
+                    setSpinsetImages(spinsetUrls);
+                }
+                
+                if (data?.entry?.volvo_gallery?.volvo_gallery_images) {
+                    const galleryImages = data.entry.volvo_gallery.volvo_gallery_images.map((imageData: any, index: number) => {
                         // Fallback data if visual_markups is empty
                         const fallbackMarkups: VisualMarkup[] = [
                             {
@@ -160,6 +170,31 @@ const VolvoGallery = () => {
         setCurrentFrame(prev => prev <= 1 ? total360Frames : prev - 1);
     };
 
+    const handleMouseDown = (e: React.MouseEvent) => {
+        setIsDragging(true);
+        setDragStartX(e.clientX);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - dragStartX;
+        const sensitivity = 5; // Adjust this value to change rotation sensitivity
+        
+        if (Math.abs(deltaX) > sensitivity) {
+            if (deltaX > 0) {
+                rotateNext();
+            } else {
+                rotatePrev();
+            }
+            setDragStartX(e.clientX);
+        }
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
     return (
         <div className="gallery-page">
             <div className="gallery-header">
@@ -254,41 +289,81 @@ const VolvoGallery = () => {
             
             {/* 360 View Modal */}
             {show360View && (
-                <div className="view-360-modal" onClick={close360View}>
-                    <div className="view-360-content" onClick={(e) => e.stopPropagation()}>
-                        <button className="view-360-close" onClick={close360View}>×</button>
-                        
+                <div className="view-360-modal">
+                    <div className="view-360-content">
+                        {/* Header */}
                         <div className="view-360-header">
-                            <h3>360° View</h3>
-                            <p>Use mouse wheel or buttons to rotate</p>
+                            <div className="view-360-header-left">
+                                <button className="view-360-back-btn" onClick={close360View}>
+                                    ← <span>Back to car details</span>
+                                </button>
+                                <div>
+                                    <h2 className="view-360-title">All New Volvo XC90</h2>
+                                    <p className="view-360-subtitle">Luxury SUV for the modern family</p>
+                                </div>
+                            </div>
+ 
                         </div>
-                        
-                        <div 
-                            className="view-360-image-container"
-                            onWheel={handleMouseWheel}
-                        >
-                            <img 
-                                src={get360ImageUrl(currentFrame)}
-                                alt={`360° view frame ${currentFrame}`}
-                                className="view-360-image"
-                                draggable={false}
-                            />
-                            
-                            <div className="view-360-controls">
-                                <button className="view-360-control-btn" onClick={rotatePrev}>
-                                    ← Rotate Left
-                                </button>
-                                <span className="view-360-frame-counter">
-                                    {currentFrame} / {total360Frames}
-                                </span>
-                                <button className="view-360-control-btn" onClick={rotateNext}>
-                                    Rotate Right →
-                                </button>
+
+                        {/* Main Image Area */}
+                        <div className="view-360-main">
+                            <div 
+                                className={`view-360-image-container ${isDragging ? 'dragging' : ''}`}
+                                onWheel={handleMouseWheel}
+                                onMouseDown={handleMouseDown}
+                                onMouseMove={handleMouseMove}
+                                onMouseUp={handleMouseUp}
+                                onMouseLeave={handleMouseUp}
+                            >
+                                <img 
+                                    src={`${get360ImageUrl(currentFrame)}?environment=${process.env.REACT_APP_CONTENTSTACK_ENVIRONMENT}`}
+                                    alt={`360° view frame ${currentFrame}`}
+                                    className="view-360-image"
+                                    draggable={false}
+                                />
+                            </div>
+
+                            {/* Controls Overlay */}
+                            <div className="view-360-controls-overlay">
+                                <div className="view-360-zoom-controls">
+                                    <button className="view-360-zoom-btn" title="Zoom Out">−</button>
+                                    <button className="view-360-zoom-btn" title="Zoom In">+</button>
+                                </div>
+                                <button className="view-360-fullscreen-btn" title="Fullscreen">⛶</button>
                             </div>
                         </div>
-                        
-                        <div className="view-360-instructions">
-                            <p>💡 Scroll with mouse wheel or use rotation buttons</p>
+
+                        {/* Bottom Navigation */}
+                        <div className="view-360-bottom-nav">
+                            <div className="view-360-nav-tabs">
+                                <button 
+                                    className={`view-360-nav-tab hotspots ${activeTab === 'hotspots' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('hotspots')}
+                                >
+                                    Hotspots
+                                </button>
+                                <button 
+                                    className={`view-360-nav-tab exterior ${activeTab === 'exterior' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('exterior')}
+                                >
+                                    Exterior
+                                </button>
+                                <button 
+                                    className={`view-360-nav-tab interior ${activeTab === 'interior' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('interior')}
+                                >
+                                    Interior
+                                </button>
+                                <button 
+                                    className={`view-360-nav-tab gallery ${activeTab === 'gallery' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('gallery')}
+                                >
+                                    Gallery
+                                </button>
+                            </div>
+                            <div className="view-360-frame-counter">
+                                {currentFrame} / {total360Frames}
+                            </div>
                         </div>
                     </div>
                 </div>

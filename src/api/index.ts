@@ -323,3 +323,23 @@ export const fetchVolvoPageData = async () => {
     console.log(error);
   }
 }
+
+export const fetchVolvoGalleryPageData = async () => {
+  try {
+    const data = await fetch(process.env.REACT_APP_CAMPAIGN_GALLERY_CDN_API || "", {
+      method: "GET",
+      headers: {
+        api_key: process.env.REACT_APP_CONTENTSTACK_API_KEY || "",
+        access_token: process.env.REACT_APP_CONTENTSTACK_DELIVERY_TOKEN || "",
+        "Content-Type": "application/json"
+      }
+    });
+    console.log(data);
+    const result = await data.json();
+    console.log(result);
+    return result;
+  }
+  catch(error) {
+    console.log(error);
+  }
+}

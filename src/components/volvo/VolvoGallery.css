@@ -13,7 +13,7 @@
 .gallery-header h1 {
   font-size: 3rem;
   font-weight: 700;
-  color: #241d32;
+  color: #7c4dff;
   margin-bottom: 1rem;
   font-family: Inter, sans-serif;
 }
@@ -27,7 +27,7 @@
 }
 
 .hotspot-toggle-btn {
-  background: #3822aa;
+  background: #7c4dff;
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -37,23 +37,23 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: Inter, sans-serif;
-  box-shadow: 0 4px 15px rgba(56, 34, 170, 0.3);
+  box-shadow: 0 4px 15px rgba(124, 77, 255, 0.3);
 }
 
 .hotspot-toggle-btn:hover {
-  background: #2d1a85;
+  background: #6a3de8;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(56, 34, 170, 0.4);
+  box-shadow: 0 6px 20px rgba(124, 77, 255, 0.4);
 }
 
 .hotspot-toggle-btn.active {
-  background: #3822aa;
-  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  background: #6a3de8;
+  box-shadow: 0 4px 15px rgba(228, 84, 214, 0.3);
 }
 
 .hotspot-toggle-btn.active:hover {
-  background: #218838;
-  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+  background: #6a3de8;
+  box-shadow: 0 6px 20px rgba(228, 84, 214, 0.4);
 }
 
 .gallery-container {
@@ -81,8 +81,8 @@
   top: 15px;
   right: 15px;
   background: rgba(0, 0, 0, 0.8);
-  color: #00ffff;
-  border: 2px solid #00ffff;
+  color: #3492fe;
+  border: 2px solid #3492fe;
   border-radius: 25px;
   padding: 0.5rem 0.75rem;
   display: flex;
@@ -98,9 +98,9 @@
 }
 
 .view-360-btn:hover {
-  background: rgba(0, 255, 255, 0.2);
+  background: rgba(52, 146, 254, 0.2);
   transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(52, 146, 254, 0.5);
 }
 
 .view-360-btn svg {
@@ -151,6 +151,7 @@
   font-weight: 600;
   margin-bottom: 0.5rem;
   font-family: Inter, sans-serif;
+  color: white;
 }
 
 .gallery-item-description {
@@ -158,6 +159,7 @@
   line-height: 1.5;
   opacity: 0.9;
   font-family: Inter, sans-serif;
+  color: white;
 }
 
 .gallery-error,
@@ -174,7 +176,7 @@
 .gallery-error h2,
 .gallery-empty h2 {
   font-size: 2rem;
-  color: #241d32;
+  color: #7c4dff;
   margin-bottom: 1rem;
   font-family: Inter, sans-serif;
 }
@@ -248,7 +250,7 @@
   width: 12px;
   height: 12px;
   background: white;
-  border: 2px solid #3822aa;
+  border: 2px solid #7c4dff;
   border-radius: 50%;
   position: relative;
   z-index: 2;
@@ -261,7 +263,7 @@
   left: 50%;
   width: 20px;
   height: 20px;
-  background: rgba(56, 34, 170, 0.3);
+  background: rgba(124, 77, 255, 0.3);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   animation: pulse 2s infinite;
@@ -284,7 +286,7 @@
 }
 
 .hotspot:hover .hotspot-dot {
-  background: #3822aa;
+  background: #7c4dff;
   border-color: white;
   transform: scale(1.2);
   transition: all 0.3s ease;
@@ -292,7 +294,7 @@
 
 .hotspot:hover .hotspot-pulse {
   animation-duration: 1s;
-  background: rgba(56, 34, 170, 0.5);
+  background: rgba(124, 77, 255, 0.5);
 }
 
 /* Hotspot Info Tooltip */
@@ -309,7 +311,7 @@
   transform: translate(20px, -50%);
   min-width: 250px;
   max-width: 300px;
-  border: 2px solid #00ffff;
+  border: 2px solid #3492fe;
 }
 
 .hotspot-info::before {
@@ -319,7 +321,7 @@
   top: 50%;
   transform: translateY(-50%);
   border: 8px solid transparent;
-  border-right-color: #00ffff;
+  border-right-color: #3492fe;
 }
 
 /* Handle tooltips near the right edge */
@@ -334,7 +336,7 @@
 .hotspot-info[style*="left: 9"]::before {
   left: calc(100% + 0px);
   border-right-color: transparent;
-  border-left-color: #00ffff;
+  border-left-color: #3492fe;
 }
 
 @keyframes fadeInScale {
@@ -354,7 +356,7 @@
   right: 8px;
   background: transparent;
   border: none;
-  color: #00ffff;
+  color: #3492fe;
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0;
@@ -369,7 +371,7 @@
 }
 
 .hotspot-info-close:hover {
-  background: rgba(0, 255, 255, 0.2);
+  background: rgba(52, 146, 254, 0.2);
   color: #ffffff;
   transform: scale(1.1);
 }
@@ -378,9 +380,9 @@
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: #00ffff;
+  color: #3492fe;
   font-family: Inter, sans-serif;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  text-shadow: 0 0 10px rgba(52, 146, 254, 0.5);
 }
 
 .hotspot-info-description {
@@ -439,167 +441,316 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.95);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #f5f5f5;
   z-index: 1000;
-  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
 }
 
 .view-360-content {
-  background: rgba(20, 20, 20, 0.95);
-  border-radius: 15px;
-  padding: 2rem;
-  max-width: 90vw;
-  max-height: 90vh;
-  position: relative;
-  border: 2px solid #00ffff;
-  box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
-}
-
-.view-360-close {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  background: transparent;
-  border: none;
-  color: #00ffff;
-  font-size: 2rem;
-  cursor: pointer;
-  padding: 0;
-  width: 40px;
-  height: 40px;
+  width: 100%;
+  height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  font-weight: bold;
-}
-
-.view-360-close:hover {
-  background: rgba(0, 255, 255, 0.2);
-  transform: scale(1.1);
+  flex-direction: column;
+  background: #f5f5f5;
 }
 
 .view-360-header {
-  text-align: center;
-  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.view-360-header h3 {
-  color: #00ffff;
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
-  font-family: Inter, sans-serif;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+.view-360-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.view-360-header p {
-  color: #ffffff;
+.view-360-back-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.view-360-title {
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
   margin: 0;
   font-family: Inter, sans-serif;
-  opacity: 0.8;
+}
+
+.view-360-subtitle {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+  font-family: Inter, sans-serif;
+}
+
+.view-360-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.view-360-price {
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: Inter, sans-serif;
+}
+
+.view-360-price-tax {
+  color: #666;
+  font-size: 0.8rem;
+  display: block;
+}
+
+.view-360-action-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
+  transition: all 0.3s ease;
+}
+
+.view-360-book-btn {
+  background: #7c4dff;
+  color: white;
+}
+
+.view-360-book-btn:hover {
+  background: #6a3de8;
+}
+
+.view-360-test-drive-btn {
+  background: #e53e3e;
+  color: white;
+}
+
+.view-360-test-drive-btn:hover {
+  background: #c53030;
+}
+
+.view-360-main {
+  flex-grow: 1;
+  position: relative;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .view-360-image-container {
   position: relative;
-  text-align: center;
-  margin-bottom: 1rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: grab;
 }
 
-.view-360-image-container:active {
+.view-360-image-container:active,
+.view-360-image-container.dragging {
   cursor: grabbing;
 }
 
 .view-360-image {
-  max-width: 600px;
-  max-height: 400px;
-  width: 100%;
+  max-width: 80%;
+  max-height: 80%;
+  width: auto;
   height: auto;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   user-select: none;
+  object-fit: contain;
 }
 
-.view-360-controls {
+.view-360-controls-overlay {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.view-360-zoom-controls {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.view-360-zoom-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: white;
+  color: #333;
+  font-size: 1.2rem;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 25px;
-  border: 1px solid rgba(0, 255, 255, 0.3);
+  transition: background-color 0.3s ease;
 }
 
-.view-360-control-btn {
-  background: #00ffff;
-  color: #000;
+.view-360-zoom-btn:hover {
+  background: #f0f0f0;
+}
+
+.view-360-zoom-btn:not(:last-child) {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.view-360-fullscreen-btn {
+  width: 40px;
+  height: 40px;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-weight: 600;
+  background: white;
+  color: #333;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: Inter, sans-serif;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
-.view-360-control-btn:hover {
-  background: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+.view-360-fullscreen-btn:hover {
+  background: #f0f0f0;
+}
+
+
+
+.view-360-bottom-nav {
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.view-360-nav-tabs {
+  display: flex;
+}
+
+.view-360-nav-tab {
+  padding: 1rem 1.5rem;
+  border: none;
+  background: none;
+  color: #666;
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.view-360-nav-tab:hover {
+  color: #333;
+  background: #f8f8f8;
+}
+
+.view-360-nav-tab.active {
+  color: #7c4dff;
+  border-bottom-color: #7c4dff;
+}
+
+.view-360-nav-tab.hotspots::before {
+  content: "🔍";
+  margin-right: 0.5rem;
+}
+
+.view-360-nav-tab.exterior::before {
+  content: "🚗";
+  margin-right: 0.5rem;
+}
+
+.view-360-nav-tab.interior::before {
+  content: "🪑";
+  margin-right: 0.5rem;
+}
+
+.view-360-nav-tab.gallery::before {
+  content: "📷";
+  margin-right: 0.5rem;
 }
 
 .view-360-frame-counter {
-  color: #00ffff;
-  font-weight: 600;
+  padding: 1rem 2rem;
+  color: #666;
   font-family: Inter, sans-serif;
-  padding: 0.5rem 1rem;
-  background: rgba(0, 255, 255, 0.1);
-  border-radius: 15px;
-  border: 1px solid rgba(0, 255, 255, 0.3);
-}
-
-.view-360-instructions {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.view-360-instructions p {
-  color: #ffffff;
-  margin: 0;
-  font-family: Inter, sans-serif;
-  opacity: 0.7;
   font-size: 0.9rem;
 }
 
 /* Mobile adjustments for 360 view */
 @media (max-width: 768px) {
-  .view-360-content {
-    padding: 1rem;
-    margin: 1rem;
-  }
-  
-  .view-360-header h3 {
-    font-size: 1.4rem;
-  }
-  
-  .view-360-image {
-    max-width: 100%;
-    max-height: 300px;
-  }
-  
-  .view-360-controls {
-    flex-direction: column;
+  .view-360-header {
+    padding: 0.5rem 1rem;
+    flex-wrap: wrap;
     gap: 0.5rem;
   }
   
-  .view-360-control-btn {
-    width: 100%;
-    padding: 0.75rem;
+  .view-360-title {
+    font-size: 1.2rem;
+  }
+  
+  .view-360-price {
+    font-size: 1.2rem;
+  }
+  
+  .view-360-action-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .view-360-header-right {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .view-360-nav-tabs {
+    overflow-x: auto;
+  }
+  
+  .view-360-nav-tab {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+  
+  .view-360-frame-counter {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .view-360-controls-overlay {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .view-360-zoom-btn,
+  .view-360-fullscreen-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
   }
 } 
