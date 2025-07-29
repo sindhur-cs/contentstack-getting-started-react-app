@@ -120,7 +120,7 @@ export const initializeContentstackSdk = () => {
       environment: REACT_APP_CONTENTSTACK_ENVIRONMENT,
     },
 
-    mode: "builder",
+    mode: "preview",
     editButton: {
       enable: true,
       exclude: ["outsideLivePreviewPortal"],
