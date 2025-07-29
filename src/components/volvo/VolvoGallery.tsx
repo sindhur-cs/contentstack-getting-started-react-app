@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import LoadingScreen from "../LoadingScreen";
-import { fetchVolvoGalleryPageData, fetchVolvoPageData } from "../../api";
+import { fetchVolvoGalleryPageData, fetchVolvoPageData, fetchSpinsetImages } from "../../api";
 import "./VolvoGallery.css";
 
 interface VisualMarkup {
@@ -51,10 +51,20 @@ const VolvoGallery = () => {
             try {
                 const data = await fetchVolvoGalleryPageData();
                 
-                // Extract spinset images for 360-degree view
-                if (data?.entry?.spinset?.spinsetimages) {
-                    const spinsetUrls = data.entry.spinset.spinsetimages.map((image: any) => image.url);
-                    setSpinsetImages(spinsetUrls);
+                // Fetch spinset images using the new API function
+                try {
+                    const spinsetData = await fetchSpinsetImages("xc90_1");
+                    if (spinsetData?.assets && Array.isArray(spinsetData.assets)) {
+                        const spinsetUrls = spinsetData.assets.map((asset: any) => asset.url);
+                        setSpinsetImages(spinsetUrls);
+                    }
+                } catch (spinsetError) {
+                    console.error("Error loading spinset images:", spinsetError);
+                    // Fallback to original method if new API fails
+                    if (data?.entry?.spinset?.spinsetimages) {
+                        const spinsetUrls = data.entry.spinset.spinsetimages.map((image: any) => image.url);
+                        setSpinsetImages(spinsetUrls);
+                    }
                 }
                 
                 if (data?.entry?.volvo_gallery?.volvo_gallery_images) {

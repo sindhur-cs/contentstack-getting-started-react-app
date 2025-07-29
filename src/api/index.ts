@@ -343,3 +343,29 @@ export const fetchVolvoGalleryPageData = async () => {
     console.log(error);
   }
 }
+
+export const fetchSpinsetImages = async (spinSetId: string = "xc90_1") => {
+  try {
+    const query = `{"custom_metadata.spin_set_id":"${spinSetId}"}`;
+    const encodedQuery = encodeURIComponent(query);
+    const url = `https://dev9-cdn.csnonprod.com/v3/assets?asc=title&include_count=true&query=${encodedQuery}`;
+    
+    const data = await fetch(url, {
+      method: "GET",
+      headers: {
+        api_key: process.env.REACT_APP_CONTENTSTACK_API_KEY || "",
+        access_token: process.env.REACT_APP_CONTENTSTACK_DELIVERY_TOKEN || "",
+        "Content-Type": "application/json"
+      }
+    });
+    
+    console.log("Spinset API response:", data);
+    const result = await data.json();
+    console.log("Spinset images result:", result);
+    return result;
+  }
+  catch(error) {
+    console.log("Error fetching spinset images:", error);
+    throw error;
+  }
+}
