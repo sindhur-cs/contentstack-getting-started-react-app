@@ -1,3 +1,42 @@
+.campaign-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  position: relative;
+  width: 80%;
+}
+
+.locale-dropdown-container {
+  grid-column: 2;
+  justify-self: end;
+}
+
+.locale-dropdown {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: white;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #241d32;
+  cursor: pointer;
+  min-width: 120px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.locale-dropdown:hover {
+  border-color: #715cdd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.locale-dropdown:focus {
+  outline: none;
+  border-color: #715cdd;
+  box-shadow: 0 0 0 3px rgba(113, 92, 221, 0.1);
+}
+
 .card {
   width: 90%;
   height: 500px;
@@ -51,14 +90,16 @@
 }
 
 .campaignTitle {
-  width: 100%;
+  grid-column: 1;
+  justify-self: start;
+  width: auto;
   padding: 20px 40px;
   border-radius: 10px;
   font-weight: bold;
   font-size: 32px;
-  margin-top: 20px;
+  margin: 0;
   font-family: "Cormorant Garamond";
-  text-align: center;
+  text-align: left;
   opacity: 0.75;
 }
 

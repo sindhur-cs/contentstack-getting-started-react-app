@@ -304,9 +304,12 @@ export const fetchCMAMenuPageData = async (
   setLoading(false);
 };
 
-export const fetchVolvoPageData = async () => {
+export const fetchVolvoPageData = async (locale: string = "en-us") => {
   try {
-    const data = await fetch(process.env.REACT_APP_CAMPAIGN_CDN_API || "", {
+    const baseUrl = process.env.REACT_APP_CAMPAIGN_CDN_API || "";
+    const url = `${baseUrl}&locale=${locale}&include_fallback=true`;
+    
+    const data = await fetch(url, {
       method: "GET",
       headers: {
         api_key: process.env.REACT_APP_CONTENTSTACK_API_KEY || "",
@@ -324,9 +327,12 @@ export const fetchVolvoPageData = async () => {
   }
 }
 
-export const fetchVolvoGalleryPageData = async () => {
+export const fetchVolvoGalleryPageData = async (locale: string = "en-us") => {
   try {
-    const data = await fetch(process.env.REACT_APP_CAMPAIGN_GALLERY_CDN_API || "", {
+    const baseUrl = process.env.REACT_APP_CAMPAIGN_GALLERY_CDN_API || "";
+    const url = `${baseUrl}&locale=${locale}&include_fallback=true`;
+    
+    const data = await fetch(url, {
       method: "GET",
       headers: {
         api_key: process.env.REACT_APP_CONTENTSTACK_API_KEY || "",

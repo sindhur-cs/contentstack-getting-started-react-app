@@ -22,6 +22,17 @@ interface GalleryImage {
   visual_markups?: VisualMarkup[];
 }
 
+interface LocaleOption {
+    code: string;
+    label: string;
+}
+
+const localeOptions: LocaleOption[] = [
+    { code: "en-us", label: "English" },
+    { code: "fr-fr", label: "French" },
+    { code: "es-es", label: "Spanish" }
+];
+
 const VolvoGallery = () => {
     const [images, setImages] = useState<GalleryImage[]>([]);
     const [spinsetImages, setSpinsetImages] = useState<string[]>([]);
@@ -34,6 +45,7 @@ const VolvoGallery = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragStartX, setDragStartX] = useState(0);
     const [activeTab, setActiveTab] = useState('exterior');
+    const [selectedLocale, setSelectedLocale] = useState<string>("en-us");
     
     // Use the 12 spinset images for 360-degree rotation
     const total360Frames = 80;
@@ -49,7 +61,7 @@ const VolvoGallery = () => {
     useEffect(() => {
         const loadGalleryImages = async () => {
             try {
-                const data = await fetchVolvoGalleryPageData();
+                const data = await fetchVolvoGalleryPageData(selectedLocale);
                 
                 // Fetch spinset images using the new API function
                 try {
@@ -113,7 +125,11 @@ const VolvoGallery = () => {
         };
 
         loadGalleryImages();
-    }, []);
+    }, [selectedLocale]);
+
+    const handleLocaleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedLocale(event.target.value);
+    };
 
     if (loading) {
         return <LoadingScreen />;
@@ -208,14 +224,32 @@ const VolvoGallery = () => {
     return (
         <div className="gallery-page">
             <div className="gallery-header">
-                <h1>XC 90</h1>
-                <p>Explore our collection of stunning images</p>
-                <button 
-                    className={`hotspot-toggle-btn ${hotspotsVisible ? 'active' : ''}`}
-                    onClick={toggleHotspots}
-                >
-                    {hotspotsVisible ? 'Hide Hotspots' : 'Show Hotspots'}
-                </button>
+                <div className="gallery-header-content">
+                    <div className="gallery-header-left">
+                        <h1>XC 90</h1>
+                    </div>
+                    <div className="gallery-header-right">
+                        <div className="locale-dropdown-container">
+                            <select 
+                                value={selectedLocale} 
+                                onChange={handleLocaleChange}
+                                className="locale-dropdown"
+                            >
+                                {localeOptions.map((option) => (
+                                    <option key={option.code} value={option.code}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <button 
+                            className={`hotspot-toggle-btn ${hotspotsVisible ? 'active' : ''}`}
+                            onClick={toggleHotspots}
+                        >
+                            {hotspotsVisible ? 'Hide Hotspots' : 'Show Hotspots'}
+                        </button>
+                    </div>
+                </div>
             </div>
             
             <div className="gallery-container">
