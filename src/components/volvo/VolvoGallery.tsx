@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import LoadingScreen from "../LoadingScreen";
-import { fetchVolvoGalleryPageData, fetchVolvoPageData, fetchSpinsetImages } from "../../api";
+import { fetchVolvoGalleryPageData, fetchSpinsetImages } from "../../api";
 import "./VolvoGallery.css";
 
 interface VisualMarkup {
@@ -84,41 +84,11 @@ const VolvoGallery = () => {
                 
                 if (data?.entry?.volvo_gallery?.volvo_gallery_images) {
                     const galleryImages = data.entry.volvo_gallery.volvo_gallery_images.map((imageData: any, index: number) => {
-                        // Fallback data if visual_markups is empty
-                        const fallbackMarkups: VisualMarkup[] = [
-                            {
-                                id: "fallback-frame",
-                                title: "Frame",
-                                description: "The twin-spar type aluminum frame is 10% lighter and more compact that the prior generation GSX-R1000, with optimized rigidity for nimble handling and a high level of grip when cornering.",
-                                type: 1,
-                                url: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400",
-                                coordinates: { x: 2563, y: 1551 }
-                            },
-                            {
-                                id: "fallback-engine",
-                                title: "Engine",
-                                description: "Advanced engine technology with superior performance and efficiency.",
-                                type: 1,
-                                url: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400",
-                                coordinates: { x: 1495, y: 1309 }
-                            },
-                            {
-                                id: "fallback-wheels",
-                                title: "Wheels",
-                                description: "High-performance wheels designed for optimal grip and handling.",
-                                type: 1,
-                                url: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400",
-                                coordinates: { x: 1239, y: 1495 }
-                            }
-                        ];
-
                         return {
                             url: imageData.url,
                             title: imageData.title || '',
                             description: imageData.description || '',
-                            visual_markups: imageData.visual_markups && imageData.visual_markups.length > 0 
-                                ? imageData.visual_markups 
-                                : fallbackMarkups
+                            visual_markups: Array.isArray(imageData.visual_markups) ? imageData.visual_markups : []
                         };
                     });
                     setImages(galleryImages);
@@ -320,7 +290,7 @@ const VolvoGallery = () => {
                             )}
                             
                             {/* Hotspots */}
-                            {hotspotsVisible && image.visual_markups && imageDimensions[index] && (
+                            {hotspotsVisible && Array.isArray(image.visual_markups) && image.visual_markups.length > 0 && imageDimensions[index] && (
                                 <div className="hotspots-container">
                                     {image.visual_markups.map((markup, markupIndex) => {
                                         const convertedCoords = convertCoordinatesToPercentage(markup.coordinates, index);
