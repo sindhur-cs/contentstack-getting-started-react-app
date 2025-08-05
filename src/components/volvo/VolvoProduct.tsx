@@ -77,29 +77,17 @@ const VolvoProduct = () => {
 
     return (
         <div className="menu-page product-page">
-            <div className="campaign-header">
-                <h2>Luxury Sedan 2024</h2>
-                <div className="locale-dropdown-container">
-                    <select 
-                        value={selectedLocale} 
-                        onChange={handleLocaleChange}
-                        className="locale-dropdown"
-                    >
-                        {localeOptions.map((option) => (
-                            <option key={option.code} value={option.code}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </div>
+ 
             
             <div className="product-container">
             <Sidebar url={section.image.url} />
                 <div className="product-image-container">
                     {/* <CanvasWithBoundingBox img={"https://dev9-dam-api.csnonprod.com/api/spaces/am7972de584c4e0397/assets/am7e18362214a6803c/f32c2d2fe77c6ba1a5bd354c/banana.png"}/> */}
                     {/* <CanvasWithBoundingBox img={"/pineapple.png"}/> */}
-                    <CanvasWithBoundingBox img={`${section.image.url}?environment=${process.env.REACT_APP_CONTENTSTACK_ENVIRONMENT}`} />
+                    <CanvasWithBoundingBox 
+                        img={`${section.image.url}?environment=${process.env.REACT_APP_CONTENTSTACK_ENVIRONMENT}`} 
+                        visualMarkups={section.image.visual_markups || []}
+                    />
                 </div>
 
                 <div className="product-details-container">

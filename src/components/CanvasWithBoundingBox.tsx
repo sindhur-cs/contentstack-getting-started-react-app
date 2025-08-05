@@ -1,5 +1,6 @@
-import { useRef, useEffect, useState } from 'react';
-import { Stage, Layer, Rect, Image, Text } from 'react-konva';
+import React, { useRef, useEffect, useState } from 'react';
+import { Stage, Layer, Rect, Image, Circle } from 'react-konva';
+import Konva from 'konva';
 import { useDispatch, useSelector } from 'react-redux';
 import useImage from 'use-image';
 import { RootState } from '../store';
@@ -8,7 +9,21 @@ import { Html } from 'react-konva-utils';
 import { Icon } from '@contentstack/venus-components';
 import LoadingScreen from './LoadingScreen';
 
-const CanvasWithBoundingBox = ({ img }: { img: string }) => {
+interface VisualMarkup {
+    id: string;
+    type: number; // 1 = hotspot, 2 = bounding box
+    title: string;
+    description: string;
+    url: string;
+    coordinates: {
+        x: number;
+        y: number;
+        height?: number; // only for type 2
+        width?: number;  // only for type 2
+    };
+}
+
+const CanvasWithBoundingBox = ({ img, visualMarkups = [] }: { img: string; visualMarkups?: VisualMarkup[] }) => {
     const boundingBoxes = useSelector((state: RootState) => state.main.boundingboxes);
     const dispatch = useDispatch();
     const [image] = useImage(img, 'anonymous');
@@ -16,6 +31,8 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
     const [canvasDimensions, setCanvasDimensions] = useState({ width: 0, height: 0 });
     const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0, offsetX: 0, offsetY: 0 });
     const [dimensionsCalculated, setDimensionsCalculated] = useState(false);
+    const [selectedMarkup, setSelectedMarkup] = useState<VisualMarkup | null>(null);
+    const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
 
     // Calculate dimensions maintaining aspect ratio
     useEffect(() => {
@@ -70,6 +87,99 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
         };
     };
 
+    // Scale visual markup coordinates
+    const scaleMarkupCoordinates = (markup: VisualMarkup) => {
+        if (!image) return markup.coordinates;
+        
+        const originalWidth = image.width;
+        const originalHeight = image.height;
+
+        const scaleX = imageDimensions.width / originalWidth;
+        const scaleY = imageDimensions.height / originalHeight;
+
+        return {
+            x: (markup.coordinates.x * scaleX) + imageDimensions.offsetX,
+            y: (markup.coordinates.y * scaleY) + imageDimensions.offsetY,
+            width: markup.coordinates.width ? markup.coordinates.width * scaleX : undefined,
+            height: markup.coordinates.height ? markup.coordinates.height * scaleY : undefined
+        };
+    };
+
+    // Handle markup click
+    const handleMarkupClick = (markup: VisualMarkup, e: any) => {
+        const scaledCoords = scaleMarkupCoordinates(markup);
+        setSelectedMarkup(selectedMarkup?.id === markup.id ? null : markup);
+        setPopupPosition({ x: scaledCoords.x, y: scaledCoords.y });
+    };
+
+    // Pulsating Hotspot Component
+    const PulsatingHotspot = ({ x, y, markup }: { x: number; y: number; markup: VisualMarkup }) => {
+        const outerCircleRef = useRef<any>(null);
+        const innerCircleRef = useRef<any>(null);
+
+        useEffect(() => {
+            // Outer pulse animation
+            const outerAnim = new Konva.Animation((frame) => {
+                if (outerCircleRef.current && frame) {
+                    const scale = 1 + 0.3 * Math.sin((frame.time * 0.003) % (2 * Math.PI));
+                    const opacity = 0.6 - 0.3 * Math.sin((frame.time * 0.003) % (2 * Math.PI));
+                    outerCircleRef.current.scaleX(scale);
+                    outerCircleRef.current.scaleY(scale);
+                    outerCircleRef.current.opacity(opacity);
+                }
+            }, outerCircleRef.current?.getLayer());
+
+            // Inner pulse animation
+            const innerAnim = new Konva.Animation((frame) => {
+                if (innerCircleRef.current && frame) {
+                    const scale = 1 + 0.1 * Math.sin((frame.time * 0.004) % (2 * Math.PI));
+                    innerCircleRef.current.scaleX(scale);
+                    innerCircleRef.current.scaleY(scale);
+                }
+            }, innerCircleRef.current?.getLayer());
+
+            outerAnim.start();
+            innerAnim.start();
+
+            return () => {
+                outerAnim.stop();
+                innerAnim.stop();
+            };
+        }, []);
+
+        return (
+            <React.Fragment>
+                {/* Outer pulse circle */}
+                <Circle
+                    ref={outerCircleRef}
+                    x={x}
+                    y={y}
+                    radius={20}
+                    fill="rgba(255, 255, 255, 0.4)"
+                    stroke="white"
+                    strokeWidth={2}
+                />
+                {/* Inner dot */}
+                <Circle
+                    ref={innerCircleRef}
+                    x={x}
+                    y={y}
+                    radius={8}
+                    fill="white"
+                    stroke="black"
+                    strokeWidth={2}
+                    onClick={(e) => handleMarkupClick(markup, e)}
+                    onMouseEnter={(e) => {
+                        e.target.getStage()!.container().style.cursor = 'pointer';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.target.getStage()!.container().style.cursor = 'default';
+                    }}
+                />
+            </React.Fragment>
+        );
+    };
+
     // Function to check if two bounding boxes overlap significantly
     const doBoxesOverlap = (box1: any, box2: any, threshold: number = 0.5) => {
         const x1 = Math.max(box1.x, box2.x);
@@ -119,6 +229,7 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
     }
 
     return (
+        <div style={{ position: 'relative', display: 'inline-block' }}>
         <Stage width={canvasDimensions.width} height={canvasDimensions.height}>
             <Layer>
                 <Image
@@ -228,8 +339,143 @@ const CanvasWithBoundingBox = ({ img }: { img: string }) => {
                         );
                     })
                 }
+                {/* Visual Markups */}
+                {
+                    visualMarkups.map((markup, index) => {
+                        const scaledCoords = scaleMarkupCoordinates(markup);
+                        
+                        if (markup.type === 1) {
+                            // Type 1: Hotspot (circular point) with pulsating animation
+                            return (
+                                <PulsatingHotspot
+                                    key={markup.id}
+                                    x={scaledCoords.x}
+                                    y={scaledCoords.y}
+                                    markup={markup}
+                                />
+                            );
+                        } else if (markup.type === 2 && scaledCoords.width && scaledCoords.height) {
+                            // Type 2: Bounding box (rectangle)
+                            return (
+                                <React.Fragment key={markup.id}>
+                                    <Rect
+                                        x={scaledCoords.x}
+                                        y={scaledCoords.y}
+                                        width={scaledCoords.width}
+                                        height={scaledCoords.height}
+                                        stroke="#00AAFF"
+                                        fill="rgba(0, 170, 255, 0.1)"
+                                        strokeWidth={2}
+                                        cornerRadius={4}
+                                        onClick={(e) => handleMarkupClick(markup, e)}
+                                        onMouseEnter={(e) => {
+                                            e.target.getStage()!.container().style.cursor = 'pointer';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.getStage()!.container().style.cursor = 'default';
+                                        }}
+                                    />
+                                    {/* Corner indicator */}
+                                    <Rect
+                                        x={scaledCoords.x + scaledCoords.width - 25}
+                                        y={scaledCoords.y + scaledCoords.height - 25}
+                                        width={25}
+                                        height={25}
+                                        fill="#00AAFF"
+                                        cornerRadius={[4, 0, 0, 0]}
+                                    />
+                                    <Html groupProps={{ x: scaledCoords.x + scaledCoords.width - 25, y: scaledCoords.y + scaledCoords.height - 25 }}>
+                                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: 25, height: 25, marginTop: 1.5 }}>
+                                            <Icon icon="ShoppingBag" height={15} width={15} version='v2' stroke="white" />
+                                        </div>
+                                    </Html>
+                                </React.Fragment>
+                            );
+                        }
+                        return null;
+                    })
+                }
             </Layer>
         </Stage>
+        
+        {/* Popup for selected visual markup */}
+        {selectedMarkup && (
+            <div 
+                style={{
+                    position: 'absolute',
+                    left: `${popupPosition.x + 30}px`,
+                    top: `${popupPosition.y - 10}px`,
+                    background: 'white',
+                    border: '2px solid #00AAFF',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    maxWidth: '300px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+                    zIndex: 1000,
+                    fontFamily: 'Arial, sans-serif'
+                }}
+            >
+                <button 
+                    onClick={() => setSelectedMarkup(null)}
+                    style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '18px',
+                        cursor: 'pointer',
+                        color: '#666'
+                    }}
+                >
+                    ×
+                </button>
+                
+                <div style={{ marginBottom: '12px' }}>
+                    <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: 'bold', color: '#333' }}>
+                        {selectedMarkup.title}
+                    </h3>
+                    <p style={{ margin: '0', fontSize: '14px', color: '#666', lineHeight: '1.4' }}>
+                        {selectedMarkup.description}
+                    </p>
+                </div>
+                
+                {selectedMarkup.url && (
+                    <div style={{ marginTop: '12px' }}>
+                        <img 
+                            src={selectedMarkup.url} 
+                            alt={selectedMarkup.title}
+                            style={{
+                                width: '100%',
+                                maxWidth: '200px',
+                                height: 'auto',
+                                borderRadius: '4px',
+                                border: '1px solid #ddd'
+                            }}
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none';
+                            }}
+                        />
+                        <a 
+                            href={selectedMarkup.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{
+                                display: 'inline-block',
+                                marginTop: '8px',
+                                color: '#00AAFF',
+                                textDecoration: 'none',
+                                fontSize: '14px',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            View Product →
+                        </a>
+                    </div>
+                )}
+            </div>
+        )}
+    </div>
     );
 };
 

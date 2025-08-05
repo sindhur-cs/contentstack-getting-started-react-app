@@ -6,7 +6,7 @@ import "./VolvoGallery.css";
 interface VisualMarkup {
   title: string;
   description: string;
-  type: string;
+  type: number;
   coordinates: {
     x: number;
     y: number;
@@ -86,19 +86,19 @@ const VolvoGallery = () => {
                             {
                                 title: "Frame",
                                 description: "The twin-spar type aluminum frame is 10% lighter and more compact that the prior generation GSX-R1000, with optimized rigidity for nimble handling and a high level of grip when cornering.",
-                                type: "Hotspot",
+                                type: 1,
                                 coordinates: { x: 45, y: 25, height: 2, width: 2 }
                             },
                             {
                                 title: "Engine",
                                 description: "Advanced engine technology with superior performance and efficiency.",
-                                type: "Hotspot",
+                                type: 1,
                                 coordinates: { x: 55, y: 45, height: 2, width: 2 }
                             },
                             {
                                 title: "Wheels",
                                 description: "High-performance wheels designed for optimal grip and handling.",
-                                type: "Hotspot",
+                                type: 1,
                                 coordinates: { x: 15, y: 65, height: 2, width: 2 }
                             }
                         ];
