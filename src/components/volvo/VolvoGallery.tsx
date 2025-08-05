@@ -4,15 +4,17 @@ import { fetchVolvoGalleryPageData, fetchVolvoPageData, fetchSpinsetImages } fro
 import "./VolvoGallery.css";
 
 interface VisualMarkup {
-  title: string;
-  description: string;
-  type: number;
-  coordinates: {
-    x: number;
-    y: number;
-    height: number;
-    width: number;
-  };
+    id: string;
+    type: number; // 1 = hotspot, 2 = bounding box
+    title: string;
+    description: string;
+    url: string;
+    coordinates: {
+        x: number;
+        y: number;
+        height?: number; // only for type 2
+        width?: number;  // only for type 2
+    };
 }
 
 interface GalleryImage {
@@ -46,6 +48,7 @@ const VolvoGallery = () => {
     const [dragStartX, setDragStartX] = useState(0);
     const [activeTab, setActiveTab] = useState('exterior');
     const [selectedLocale, setSelectedLocale] = useState<string>("en-us");
+    const [imageDimensions, setImageDimensions] = useState<{[key: number]: {width: number, height: number}}>({});
     
     // Use the 12 spinset images for 360-degree rotation
     const total360Frames = 80;
@@ -84,22 +87,28 @@ const VolvoGallery = () => {
                         // Fallback data if visual_markups is empty
                         const fallbackMarkups: VisualMarkup[] = [
                             {
+                                id: "fallback-frame",
                                 title: "Frame",
                                 description: "The twin-spar type aluminum frame is 10% lighter and more compact that the prior generation GSX-R1000, with optimized rigidity for nimble handling and a high level of grip when cornering.",
                                 type: 1,
-                                coordinates: { x: 45, y: 25, height: 2, width: 2 }
+                                url: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400",
+                                coordinates: { x: 2563, y: 1551 }
                             },
                             {
+                                id: "fallback-engine",
                                 title: "Engine",
                                 description: "Advanced engine technology with superior performance and efficiency.",
                                 type: 1,
-                                coordinates: { x: 55, y: 45, height: 2, width: 2 }
+                                url: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400",
+                                coordinates: { x: 1495, y: 1309 }
                             },
                             {
+                                id: "fallback-wheels",
                                 title: "Wheels",
                                 description: "High-performance wheels designed for optimal grip and handling.",
                                 type: 1,
-                                coordinates: { x: 15, y: 65, height: 2, width: 2 }
+                                url: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400",
+                                coordinates: { x: 1239, y: 1495 }
                             }
                         ];
 
@@ -221,6 +230,35 @@ const VolvoGallery = () => {
         setIsDragging(false);
     };
 
+    // Handle image load to get natural dimensions
+    const handleImageLoad = (index: number, event: React.SyntheticEvent<HTMLImageElement>) => {
+        const img = event.target as HTMLImageElement;
+        setImageDimensions(prev => ({
+            ...prev,
+            [index]: {
+                width: img.naturalWidth,
+                height: img.naturalHeight
+            }
+        }));
+    };
+
+    // Convert pixel coordinates to percentages
+    const convertCoordinatesToPercentage = (coordinates: VisualMarkup['coordinates'], imageIndex: number) => {
+        const imgDims = imageDimensions[imageIndex];
+        if (!imgDims) {
+            // Return original if dimensions not loaded yet
+            return coordinates;
+        }
+        
+        // Convert pixel coordinates to percentages
+        return {
+            x: (coordinates.x / imgDims.width) * 100,
+            y: (coordinates.y / imgDims.height) * 100,
+            width: coordinates.width ? (coordinates.width / imgDims.width) * 100 : undefined,
+            height: coordinates.height ? (coordinates.height / imgDims.height) * 100 : undefined
+        };
+    };
+
     return (
         <div className="gallery-page">
             <div className="gallery-header">
@@ -261,6 +299,7 @@ const VolvoGallery = () => {
                                 alt={image.title || `Gallery image ${index + 1}`}
                                 className="gallery-image"
                                 loading="lazy"
+                                onLoad={(e) => handleImageLoad(index, e)}
                             />
                             
                             {/* 360 View Button - Only for first image */}
@@ -281,32 +320,35 @@ const VolvoGallery = () => {
                             )}
                             
                             {/* Hotspots */}
-                            {hotspotsVisible && image.visual_markups && (
+                            {hotspotsVisible && image.visual_markups && imageDimensions[index] && (
                                 <div className="hotspots-container">
-                                    {image.visual_markups.map((markup, markupIndex) => (
-                                        <div
-                                            key={markupIndex}
-                                            className="hotspot"
-                                            style={{
-                                                left: `${markup.coordinates.x}%`,
-                                                top: `${markup.coordinates.y}%`,
-                                            }}
-                                            onClick={() => handleHotspotClick(markup, index)}
-                                        >
-                                            <div className="hotspot-pulse"></div>
-                                            <div className="hotspot-dot"></div>
-                                        </div>
-                                    ))}
+                                    {image.visual_markups.map((markup, markupIndex) => {
+                                        const convertedCoords = convertCoordinatesToPercentage(markup.coordinates, index);
+                                        return (
+                                            <div
+                                                key={markupIndex}
+                                                className="hotspot"
+                                                style={{
+                                                    left: `${convertedCoords.x}%`,
+                                                    top: `${convertedCoords.y}%`,
+                                                }}
+                                                onClick={() => handleHotspotClick(markup, index)}
+                                            >
+                                                <div className="hotspot-pulse"></div>
+                                                <div className="hotspot-dot"></div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             )}
                             
                             {/* Selected Hotspot Info */}
-                            {selectedHotspot && selectedHotspot.imageIndex === index && (
+                            {selectedHotspot && selectedHotspot.imageIndex === index && imageDimensions[index] && (
                                 <div 
                                     className="hotspot-info"
                                     style={{
-                                        left: `${selectedHotspot.hotspot.coordinates.x}%`,
-                                        top: `${selectedHotspot.hotspot.coordinates.y}%`,
+                                        left: `${convertCoordinatesToPercentage(selectedHotspot.hotspot.coordinates, index).x}%`,
+                                        top: `${convertCoordinatesToPercentage(selectedHotspot.hotspot.coordinates, index).y}%`,
                                     }}
                                 >
                                     <button 
