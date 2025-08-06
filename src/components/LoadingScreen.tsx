@@ -5,7 +5,7 @@ const LoadingScreen = () => {
   return (
     <div className="loading-screen">
       <img
-        src="/drinkitup.png"
+        src="/volvo-logo.png"
         alt="Logo"
         height={80}
         width={80}
